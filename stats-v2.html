@@ -83,7 +83,6 @@
             box-shadow: 0 4px 16px var(--shadow);
         }
         
-        /* ===== 单字词汇（带语言标记）===== */
         .char-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -102,17 +101,14 @@
             color: #5D534A;
         }
         
-        /* 普通话单字 */
         .char-item.pu {
             background: linear-gradient(135deg, #FFF5EE 0%, #FFE8DC 100%);
         }
         
-        /* 粤语单字 */
         .char-item.yue {
             background: linear-gradient(135deg, #E8F5E8 0%, #D8ECD8 100%);
         }
         
-        /* 语言角标 */
         .char-item .lang-tag {
             position: absolute;
             bottom: 2px;
@@ -136,7 +132,6 @@
             color: white;
         }
         
-        /* ===== 括号词（带语言标记）===== */
         .bracket-list {
             display: flex;
             flex-wrap: wrap;
@@ -176,7 +171,6 @@
         .bracket-item.pu .lang-dot { background: #F5C4A8; }
         .bracket-item.yue .lang-dot { background: #98C098; }
         
-        /* ===== 两字词（带语言标记）===== */
         .word-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -221,7 +215,6 @@
             color: #5A7A5A;
         }
         
-        /* ===== 三字词（带语言标记）===== */
         .word-grid-3 {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -265,7 +258,6 @@
             color: #8A5A3A;
         }
         
-        /* ===== 英语（竖向+翻译）===== */
         .english-list {
             display: flex;
             flex-direction: column;
@@ -298,7 +290,6 @@
             color: #8A827A;
         }
         
-        /* 底部导航 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -323,7 +314,6 @@
         .nav-item.active { color: #E89870; }
         .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
         
-        /* 图例 */
         .legend {
             display: flex;
             gap: 16px;
@@ -355,16 +345,16 @@
 <body>
     <div class="container">
         <div class="hero">
-            <div class="hero-num">135<span>词</span></div>
+            <div class="hero-num">140<span>词</span></div>
             <div class="hero-label">VOCABULARY</div>
         </div>
         
         <div class="content">
-            <!-- 单字 - 6列网格带语言标记 -->
+            <!-- 单字 - 已修正粤语 -->
             <div class="cat">
                 <div class="cat-header">
                     <div class="cat-title">单字词汇</div>
-                    <div class="cat-num">94</div>
+                    <div class="cat-num">100</div>
                 </div>
                 
                 <div class="legend">
@@ -374,7 +364,6 @@
                 
                 <div class="word-card">
                     <div class="char-grid">
-                        <!-- 普通话单字 (标记 pu) -->
                         <div class="char-item pu">要<span class="lang-tag">普</span></div>
                         <div class="char-item pu">书<span class="lang-tag">普</span></div>
                         <div class="char-item pu">喂<span class="lang-tag">普</span></div>
@@ -391,20 +380,30 @@
                         <div class="char-item pu">穿<span class="lang-tag">普</span></div>
                         <div class="char-item pu">灯<span class="lang-tag">普</span></div>
                         <div class="char-item pu">袜<span class="lang-tag">普</span></div>
-                        <div class="char-item pu">鞋<span class="lang-tag">普</span></div>
+                        <!-- 鞋 修正为粤语 -->
+                        <div class="char-item yue">鞋<span class="lang-tag">粤</span></div>
                         <div class="char-item pu">蟹<span class="lang-tag">普</span></div>
                         <div class="char-item pu">牙<span class="lang-tag">普</span></div>
                         <div class="char-item pu">羊<span class="lang-tag">普</span></div>
-                        <div class="char-item pu">药<span class="lang-tag">普</span></div>
+                        <!-- 药 修正为粤语 -->
+                        <div class="char-item yue">药<span class="lang-tag">粤</span></div>
                         <div class="char-item pu">叶<span class="lang-tag">普</span></div>
                         <div class="char-item pu">衣<span class="lang-tag">普</span></div>
                         <div class="char-item pu">汁<span class="lang-tag">普</span></div>
-                        <!-- 粤语单字 (标记 yue) -->
+                        <!-- 粤语单字 -->
                         <div class="char-item yue">羹<span class="lang-tag">粤</span></div>
                         <div class="char-item yue">仔<span class="lang-tag">粤</span></div>
                         <div class="char-item yue">姊<span class="lang-tag">粤</span></div>
                         <div class="char-item yue">虾<span class="lang-tag">粤</span></div>
-                        <!-- 继续普通话 -->
+                        <!-- 蚊 粤语 -->
+                        <div class="char-item yue">蚊<span class="lang-tag">粤</span></div>
+                        <!-- 棋 粤语 -->
+                        <div class="char-item yue">棋<span class="lang-tag">粤</span></div>
+                        <!-- 伞 粤语 -->
+                        <div class="char-item yue">伞<span class="lang-tag">粤</span></div>
+                        <!-- 拆 粤语 -->
+                        <div class="char-item yue">拆<span class="lang-tag">粤</span></div>
+                        <!-- 普通话继续 -->
                         <div class="char-item pu">包<span class="lang-tag">普</span></div>
                         <div class="char-item pu">猫<span class="lang-tag">普</span></div>
                         <div class="char-item pu">帽<span class="lang-tag">普</span></div>
@@ -457,6 +456,7 @@
                         <div class="char-item pu">箱<span class="lang-tag">普</span></div>
                         <div class="char-item pu">椅<span class="lang-tag">普</span></div>
                         <div class="char-item pu">凳<span class="lang-tag">普</span></div>
+                        <div class="char-item pu">牙<span class="lang-tag">普</span></div>
                         <div class="char-item pu">跳<span class="lang-tag">普</span></div>
                         <div class="char-item pu">看<span class="lang-tag">普</span></div>
                         <div class="char-item pu">杯<span class="lang-tag">普</span></div>
@@ -470,7 +470,7 @@
                 </div>
             </div>
             
-            <!-- 括号词 - 带语言标记 -->
+            <!-- 括号词 -->
             <div class="cat">
                 <div class="cat-header">
                     <div class="cat-title">带括号</div>
@@ -503,11 +503,11 @@
                 </div>
             </div>
             
-            <!-- 两字词 - 带语言标记 -->
+            <!-- 两字词 - 已添加丑丑 -->
             <div class="cat">
                 <div class="cat-header">
                     <div class="cat-title">两字词语</div>
-                    <div class="cat-num">28</div>
+                    <div class="cat-num">30</div>
                 </div>
                 
                 <div class="legend">
@@ -544,12 +544,13 @@
                         <div class="grid-item pu"><span class="tag">普</span>膏膏</div>
                         <div class="grid-item pu"><span class="tag">普</span>游泳</div>
                         <div class="grid-item pu"><span class="tag">普</span>水水</div>
+                        <div class="grid-item yue"><span class="tag">粤</span>丑丑</div>
                         <div class="grid-item yue"><span class="tag">粤</span>球球</div>
                     </div>
                 </div>
             </div>
             
-            <!-- 三字词 - 带语言标记 -->
+            <!-- 三字词 -->
             <div class="cat">
                 <div class="cat-header">
                     <div class="cat-title">三字词语</div>
@@ -572,7 +573,7 @@
                 </div>
             </div>
             
-            <!-- 英语 - 竖向+翻译 -->
+            <!-- 英语 -->
             <div class="cat">
                 <div class="cat-header">
                     <div class="cat-title">English</div>
