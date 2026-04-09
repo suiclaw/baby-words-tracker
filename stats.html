@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宝宝语言记录 - 统计</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 100%);
+            min-height: 100vh;
+            padding: 20px 20px 120px 20px;
+        }
+        .container { max-width: 480px; margin: 0 auto; }
+        .stats-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .stats-header h2 { font-size: 36px; color: #333; margin-bottom: 20px; }
+        .total-box {
+            background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+        }
+        .total-number { font-size: 72px; font-weight: 700; }
+        .total-label { font-size: 28px; }
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 15px;
+        }
+        .category-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+        }
+        .category-title { font-size: 30px; font-weight: 700; color: #333; }
+        .category-count { font-size: 24px; color: #FF69B4; font-weight: 600; }
+        .category-content { font-size: 24px; color: #555; line-height: 1.8; }
+        .lang-tag {
+            display: inline-block; padding: 5px 12px; border-radius: 15px;
+            font-size: 18px; margin-right: 8px; margin-bottom: 5px;
+        }
+        .tag-mandarin { background: #FFB6C1; color: white; }
+        .tag-cantonese { background: #FFD700; color: white; }
+        .tag-english { background: #87CEEB; color: white; }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+        .nav-item { flex: 1; text-align: center; padding: 10px; text-decoration: none; }
+        .nav-item.active { color: #FF69B4; }
+        .nav-icon { font-size: 32px; display: block; margin-bottom: 5px; }
+        .nav-text { font-size: 22px; font-weight: 500; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="stats-header">
+            <h2>📊 宝宝语言统计</h2>
+            <div class="total-box">
+                <div class="total-number" id="totalCount">123</div>
+                <div class="total-label">总词汇</div>
+            </div>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-header">
+                <div class="category-title">🌸 单字词汇</div>
+                <div class="category-count">82个</div>
+            </div>
+            <div class="category-content">
+                <span class="lang-tag tag-mandarin">普通话</span>
+                要、书、喂、果、调、饱、鱼、菜、煲、被、鼻、波、茶、穿、灯、袜、鞋...
+            </div>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-header">
+                <div class="category-title">🌼 两字词语</div>
+                <div class="category-count">34个</div>
+            </div>
+            <div class="category-content">
+                <span class="lang-tag tag-mandarin">普通话</span>
+                <span class="lang-tag tag-cantonese">粤语</span>
+                妈妈、妈咪、阿嫲、爷爷、奶奶、哥哥、姐姐...
+            </div>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-header">
+                <div class="category-title">🌻 三字词语</div>
+                <div class="category-count">5个</div>
+            </div>
+            <div class="category-content">
+                <span class="lang-tag tag-mandarin">普通话</span>
+                呱呱呱、我也要、你也要、抱抱我、一点点
+            </div>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-header">
+                <div class="category-title">🇬🇧 英语单词</div>
+                <div class="category-count">7个</div>
+            </div>
+            <div class="category-content">
+                <span class="lang-tag tag-english">英语</span>
+                peepee、poopoo、phone、spoon、moon、Apple、ball
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="record.html" class="nav-item">
+            <span class="nav-icon">📝</span>
+            <span class="nav-text">录入</span>
+        </a>
+        <a href="stats.html" class="nav-item active">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">统计</span>
+        </a>
+        <a href="sync.html" class="nav-item">
+            <span class="nav-icon">📤</span>
+            <span class="nav-text">导入导出</span>
+        </a>
+    </div>
+
+    <script>
+        let words = JSON.parse(localStorage.getItem('babyWords') || '[]');
+        document.getElementById('totalCount').textContent = words.length;
+    </script>
+</body>
+</html>

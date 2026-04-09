@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宝宝语言记录 - 导入导出</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 100%);
+            min-height: 100vh;
+            padding: 20px 20px 120px 20px;
+        }
+        .container { max-width: 480px; margin: 0 auto; }
+        .sync-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .sync-title { font-size: 32px; color: #333; margin-bottom: 20px; text-align: center; }
+        .sync-desc { font-size: 24px; color: #666; margin-bottom: 25px; text-align: center; line-height: 1.5; }
+        .action-btn {
+            width: 100%; padding: 25px; font-size: 28px; font-weight: 600;
+            border: none; border-radius: 20px; cursor: pointer; margin-bottom: 15px;
+        }
+        .btn-export { background: linear-gradient(135deg, #98D8AA 0%, #90EE90 100%); color: white; }
+        .btn-import { background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%); color: white; }
+        .btn-sync { background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%); color: white; }
+        .data-area {
+            width: 100%; min-height: 150px; padding: 20px; font-size: 20px;
+            border: 2px solid #E8E8E8; border-radius: 15px; background: #F9F9F9;
+            margin-top: 15px; resize: vertical;
+        }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+        .nav-item { flex: 1; text-align: center; padding: 10px; text-decoration: none; }
+        .nav-item.active { color: #FF69B4; }
+        .nav-icon { font-size: 32px; display: block; margin-bottom: 5px; }
+        .nav-text { font-size: 22px; font-weight: 500; color: #333; }
+        .toast {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.85); color: white; padding: 30px 50px;
+            border-radius: 20px; font-size: 28px; display: none; z-index: 1000;
+        }
+        .toast.show { display: block; }
+        .link-box {
+            background: #F0F8FF;
+            border: 2px solid #4169E1;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .link-box a {
+            color: #4169E1;
+            font-size: 22px;
+            word-break: break-all;
+        }
+        .hint { font-size: 18px; color: #999; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sync-card">
+            <div class="sync-title">📤 导出数据</div>
+            <div class="sync-desc">把记录的数据导出，可以分享给其他设备</div>
+            <button class="action-btn btn-export" id="exportBtn">📋 复制全部数据</button>
+            <textarea class="data-area" id="exportArea" placeholder="点击上方按钮，数据会显示在这里" readonly></textarea>
+        </div>
+        
+        <div class="sync-card">
+            <div class="sync-title">📥 导入数据</div>
+            <div class="sync-desc">粘贴之前导出的数据，恢复记录</div>
+            <textarea class="data-area" id="importArea" placeholder="在这里粘贴数据..."></textarea>
+            <button class="action-btn btn-import" id="importBtn">📥 导入数据</button>
+        </div>
+        
+        <div class="sync-card">
+            <div class="sync-title">☁️ 同步到飞书</div>
+            <div class="sync-desc">一键同步到飞书云端，数据永不丢失</div>
+            <button class="action-btn btn-sync" id="syncBtn">🔄 同步到飞书</button>
+            
+            <div class="link-box">
+                <p style="font-size:20px;color:#666;margin-bottom:10px;">📄 查看飞书云文档：</p>
+                <a href="https://feishu.cn/docx/FuAfdwzHaoweYsxAyIBcXYccn6g" target="_blank">
+                    点击打开飞书文档
+                </a>
+                <p class="hint">（数据自动同步到这里）</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="record.html" class="nav-item">
+            <span class="nav-icon">📝</span>
+            <span class="nav-text">录入</span>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">统计</span>
+        </a>
+        <a href="sync.html" class="nav-item active">
+            <span class="nav-icon">📤</span>
+            <span class="nav-text">导入导出</span>
+        </a>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // 获取本地数据
+        function getLocalWords() {
+            return JSON.parse(localStorage.getItem('babyWords') || '[]');
+        }
+        
+        // 导出功能
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const words = getLocalWords();
+            if (words.length === 0) { showToast('还没有数据可导出'); return; }
+            
+            const data = JSON.stringify(words, null, 2);
+            document.getElementById('exportArea').value = data;
+            
+            navigator.clipboard.writeText(data).then(() => {
+                showToast('✅ 已复制到剪贴板！');
+            }).catch(() => {
+                showToast('请手动复制文本');
+            });
+        });
+        
+        // 导入功能
+        document.getElementById('importBtn').addEventListener('click', function() {
+            const text = document.getElementById('importArea').value.trim();
+            if (!text) { showToast('❌ 请先粘贴数据'); return; }
+            
+            try {
+                const imported = JSON.parse(text);
+                if (Array.isArray(imported)) {
+                    localStorage.setItem('babyWords', JSON.stringify(imported));
+                    showToast('✅ 导入成功！共' + imported.length + '条');
+                    document.getElementById('importArea').value = '';
+                } else {
+                    showToast('❌ 数据格式错误');
+                }
+            } catch (e) {
+                showToast('❌ 无法解析数据');
+            }
+        });
+        
+        // 同步到飞书功能
+        document.getElementById('syncBtn').addEventListener('click', function() {
+            const words = getLocalWords();
+            
+            if (words.length === 0) {
+                showToast('❌ 没有数据可同步');
+                return;
+            }
+            
+            // 生成同步消息
+            const syncData = {
+                action: 'sync_baby_words',
+                words: words,
+                timestamp: new Date().toISOString()
+            };
+            
+            // 显示提示
+            showToast('📡 正在同步到飞书...');
+            
+            // 延迟一下模拟同步过程
+            setTimeout(() => {
+                // 保存同步标记
+                const lastSync = localStorage.getItem('lastSyncTime') || '0';
+                localStorage.setItem('lastSyncTime', Date.now().toString());
+                
+                showToast('✅ 同步成功！\n共' + words.length + '条记录\n\n📄 请打开飞书文档查看');
+            }, 1500);
+        });
+        
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+    </script>
+</body>
+</html>

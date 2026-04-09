@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宝宝语言记录 - 录入</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 100%);
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .baby-icon { font-size: 70px; margin-bottom: 10px; }
+        .header-card h1 { font-size: 42px; color: #FF69B4; margin-bottom: 5px; }
+        .header-card p { font-size: 24px; color: #666; }
+        .stats-brief {
+            background: linear-gradient(135deg, #FFB6C1 0%, #FFDAB9 100%);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .stats-number { font-size: 60px; font-weight: 700; }
+        .stats-label { font-size: 26px; }
+        .record-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 35px 25px;
+            margin-bottom: 20px;
+        }
+        .section-title { font-size: 32px; color: #333; text-align: center; margin-bottom: 30px; font-weight: 600; }
+        .lang-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; }
+        .lang-btn {
+            width: 95px; height: 95px; border-radius: 50%; border: 4px solid transparent;
+            font-size: 22px; font-weight: 700; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .lang-btn .emoji { font-size: 28px; margin-bottom: 3px; }
+        .lang-btn.mandarin { background: #FFB6C1; color: white; }
+        .lang-btn.mandarin.selected { background: #FF1493; transform: scale(1.15); box-shadow: 0 8px 25px rgba(255, 20, 147, 0.5); }
+        .lang-btn.cantonese { background: #FFD700; color: white; }
+        .lang-btn.cantonese.selected { background: #FFA500; transform: scale(1.15); box-shadow: 0 8px 25px rgba(255, 165, 0, 0.5); }
+        .lang-btn.english { background: #87CEEB; color: white; }
+        .lang-btn.english.selected { background: #4169E1; transform: scale(1.15); box-shadow: 0 8px 25px rgba(65, 105, 225, 0.5); }
+        .input-area { margin-bottom: 30px; }
+        .input-label { font-size: 28px; color: #555; margin-bottom: 15px; display: block; text-align: center; }
+        .word-input {
+            width: 100%; padding: 25px 20px; font-size: 32px; border: 3px solid #E8E8E8;
+            border-radius: 20px; background: #F9F9F9; text-align: center; outline: none;
+        }
+        .word-input:focus { border-color: #FFB6C1; background: white; }
+        .record-btn {
+            width: 100%; padding: 30px; font-size: 36px; font-weight: 700; color: white;
+            background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%); border: none;
+            border-radius: 25px; cursor: pointer; box-shadow: 0 8px 25px rgba(255, 99, 71, 0.4);
+        }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+        .nav-item { flex: 1; text-align: center; padding: 10px; text-decoration: none; }
+        .nav-item.active { color: #FF69B4; }
+        .nav-icon { font-size: 32px; display: block; margin-bottom: 5px; }
+        .nav-text { font-size: 22px; font-weight: 500; color: #333; }
+        .toast {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.85); color: white; padding: 30px 50px;
+            border-radius: 20px; font-size: 28px; display: none; z-index: 1000;
+        }
+        .toast.show { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-card">
+            <div class="baby-icon">👶</div>
+            <h1>宝宝语言记录</h1>
+            <p>记录每一个成长的瞬间</p>
+        </div>
+        
+        <div class="stats-brief">
+            <div class="stats-number" id="totalCount">123</div>
+            <div class="stats-label">宝宝会说多少词</div>
+        </div>
+        
+        <div class="record-card">
+            <div class="section-title">🎙️ 选择语言</div>
+            <div class="lang-buttons">
+                <button class="lang-btn mandarin selected" data-lang="mandarin">
+                    <span class="emoji">🗣️</span>普通话
+                </button>
+                <button class="lang-btn cantonese" data-lang="cantonese">
+                    <span class="emoji">🗣️</span>粤语
+                </button>
+                <button class="lang-btn english" data-lang="english">
+                    <span class="emoji">🗣️</span>英语
+                </button>
+            </div>
+            <div class="input-area">
+                <label class="input-label">宝宝刚才说的话</label>
+                <input type="text" class="word-input" id="wordInput" placeholder="例如：妈妈、抱抱">
+            </div>
+            <button class="record-btn" id="recordBtn">✅ 记录下来</button>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="record.html" class="nav-item active">
+            <span class="nav-icon">📝</span>
+            <span class="nav-text">录入</span>
+        </a>
+        <a href="stats.html" class="nav-item">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">统计</span>
+        </a>
+        <a href="sync.html" class="nav-item">
+            <span class="nav-icon">📤</span>
+            <span class="nav-text">导入导出</span>
+        </a>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let currentLang = 'mandarin';
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                currentLang = this.dataset.lang;
+            });
+        });
+        
+        document.getElementById('recordBtn').addEventListener('click', function() {
+            const input = document.getElementById('wordInput');
+            const word = input.value.trim();
+            if (!word) { showToast('❌ 请输入宝宝说的话'); return; }
+            
+            let words = JSON.parse(localStorage.getItem('babyWords') || '[]');
+            words.unshift({ id: Date.now(), word: word, language: currentLang, timestamp: new Date().toISOString() });
+            localStorage.setItem('babyWords', JSON.stringify(words));
+            
+            input.value = '';
+            document.getElementById('totalCount').textContent = words.length;
+            showToast('✅ 记录成功！✨');
+        });
+        
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+        
+        // 初始化统计
+        let words = JSON.parse(localStorage.getItem('babyWords') || '[]');
+        document.getElementById('totalCount').textContent = words.length;
+        document.getElementById('wordInput').focus();
+    </script>
+</body>
+</html>
