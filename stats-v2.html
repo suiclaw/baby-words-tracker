@@ -7,7 +7,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* 温暖明亮的莫兰迪色系 */
         :root {
             --bg: #F5EDE4;
             --card: #FFFFFF;
@@ -29,7 +28,6 @@
         
         .container { max-width: 100%; }
         
-        /* 顶部 */
         .hero {
             background: linear-gradient(135deg, #E8C4B8 0%, #F5E6D8 100%);
             padding: 40px 24px;
@@ -57,12 +55,9 @@
             letter-spacing: 3px;
         }
         
-        /* 内容 */
         .content { padding: 20px; }
         
-        .cat {
-            margin-bottom: 20px;
-        }
+        .cat { margin-bottom: 20px; }
         
         .cat-header {
             display: flex;
@@ -83,7 +78,6 @@
             color: #D4A88C;
         }
         
-        /* 统一卡片样式 */
         .word-card {
             background: var(--card);
             border-radius: 18px;
@@ -105,7 +99,6 @@
             vertical-align: middle;
         }
         
-        /* 括号词 */
         .bracket-tag {
             display: inline-block;
             background: #F5EDE4;
@@ -120,7 +113,7 @@
             font-size: 12px;
         }
         
-        /* 两字 - 3列网格 */
+        /* 两字词网格 - 区分普通话/粤语 */
         .word-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -128,12 +121,44 @@
         }
         
         .grid-item {
-            background: #F5EDE4;
             border-radius: 12px;
-            padding: 12px 8px;
+            padding: 14px 8px;
             text-align: center;
             font-size: 16px;
             color: #5D534A;
+            position: relative;
+        }
+        
+        /* 普通话 */
+        .grid-item.pu {
+            background: linear-gradient(135deg, #F5E6DE 0%, #EDE4DC 100%);
+            border-left: 3px solid #D4A88C;
+        }
+        
+        /* 粤语 */
+        .grid-item.yue {
+            background: linear-gradient(135deg, #D8E4D8 0%, #C8DCC8 100%);
+            border-left: 3px solid #8AAA8A;
+        }
+        
+        /* 角标 */
+        .grid-item .tag {
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            font-size: 9px;
+            padding: 1px 4px;
+            border-radius: 4px;
+        }
+        
+        .grid-item.pu .tag {
+            background: rgba(212, 168, 140, 0.3);
+            color: #A87858;
+        }
+        
+        .grid-item.yue .tag {
+            background: rgba(138, 170, 138, 0.3);
+            color: #5A7A5A;
         }
         
         /* 三字 - 2列网格 */
@@ -153,14 +178,12 @@
             font-weight: 500;
         }
         
-        /* 英语 - 同样是浅色卡片 */
+        /* 英语 */
         .english-card {
             background: linear-gradient(135deg, #B8C9D4 0%, #D4E0E8 100%);
         }
         
-        .english-card .cat-num {
-            color: #6A7A8A;
-        }
+        .english-card .cat-num { color: #6A7A8A; }
         
         .english-list {
             font-size: 18px;
@@ -168,9 +191,7 @@
             line-height: 2.2;
         }
         
-        .english-list .dot {
-            color: #8A9AAA;
-        }
+        .english-list .dot { color: #8A9AAA; }
         
         /* 底部导航 */
         .bottom-nav {
@@ -196,6 +217,34 @@
         
         .nav-item.active { color: #D4A88C; }
         .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
+        
+        /* 图例 */
+        .legend {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #8A827A;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        
+        .legend-dot.pu { background: #D4A88C; }
+        .legend-dot.yue { background: #8AAA8A; }
     </style>
 </head>
 <body>
@@ -246,47 +295,62 @@
                 </div>
             </div>
             
-            <!-- 两字 -->
+            <!-- 两字词 - 带语言区分 -->
             <div class="cat">
                 <div class="cat-header">
                     <div class="cat-title">两字词语</div>
                     <div class="cat-num">28</div>
                 </div>
+                
+                <!-- 图例 -->
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot pu"></div>
+                        普通话
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot yue"></div>
+                        粤语
+                    </div>
+                </div>
+                
                 <div class="word-card">
                     <div class="word-grid">
-                        <div class="grid-item">妈妈</div>
-                        <div class="grid-item">妈咪</div>
-                        <div class="grid-item">阿嫲</div>
-                        <div class="grid-item">爷爷</div>
-                        <div class="grid-item">奶奶</div>
-                        <div class="grid-item">哥哥</div>
-                        <div class="grid-item">姐姐</div>
-                        <div class="grid-item">弟弟</div>
-                        <div class="grid-item">妹妹</div>
-                        <div class="grid-item">叔叔</div>
-                        <div class="grid-item">面面</div>
-                        <div class="grid-item">包包</div>
-                        <div class="grid-item">饼饼</div>
-                        <div class="grid-item">肉肉</div>
-                        <div class="grid-item">糖糖</div>
-                        <div class="grid-item">蛋蛋</div>
-                        <div class="grid-item">桃桃</div>
-                        <div class="grid-item">月月</div>
-                        <div class="grid-item">高高</div>
-                        <div class="grid-item">喵喵</div>
-                        <div class="grid-item">咚咚</div>
-                        <div class="grid-item">圆圆</div>
-                        <div class="grid-item">拍照</div>
-                        <div class="grid-item">吸管</div>
-                        <div class="grid-item">膏膏</div>
-                        <div class="grid-item">游泳</div>
-                        <div class="grid-item">水水</div>
-                        <div class="grid-item">球球</div>
+                        <!-- 普通话 -->
+                        <div class="grid-item pu"><span class="tag">普</span>妈妈</div>
+                        <div class="grid-item pu"><span class="tag">普</span>妈咪</div>
+                        <div class="grid-item yue"><span class="tag">粤</span>阿嫲</div>
+                        <div class="grid-item pu"><span class="tag">普</span>爷爷</div>
+                        <div class="grid-item pu"><span class="tag">普</span>奶奶</div>
+                        <div class="grid-item pu"><span class="tag">普</span>哥哥</div>
+                        <div class="grid-item pu"><span class="tag">普</span>姐姐</div>
+                        <div class="grid-item pu"><span class="tag">普</span>弟弟</div>
+                        <div class="grid-item pu"><span class="tag">普</span>妹妹</div>
+                        <div class="grid-item pu"><span class="tag">普</span>叔叔</div>
+                        <div class="grid-item pu"><span class="tag">普</span>面面</div>
+                        <div class="grid-item pu"><span class="tag">普</span>包包</div>
+                        <div class="grid-item pu"><span class="tag">普</span>饼饼</div>
+                        <div class="grid-item pu"><span class="tag">普</span>肉肉</div>
+                        <div class="grid-item pu"><span class="tag">普</span>糖糖</div>
+                        <div class="grid-item pu"><span class="tag">普</span>蛋蛋</div>
+                        <div class="grid-item pu"><span class="tag">普</span>桃桃</div>
+                        <div class="grid-item pu"><span class="tag">普</span>月月</div>
+                        <div class="grid-item pu"><span class="tag">普</span>高高</div>
+                        <div class="grid-item pu"><span class="tag">普</span>喵喵</div>
+                        <div class="grid-item pu"><span class="tag">普</span>咚咚</div>
+                        <div class="grid-item pu"><span class="tag">普</span>圆圆</div>
+                        <div class="grid-item pu"><span class="tag">普</span>拍照</div>
+                        <div class="grid-item pu"><span class="tag">普</span>吸管</div>
+                        <div class="grid-item pu"><span class="tag">普</span>膏膏</div>
+                        <div class="grid-item pu"><span class="tag">普</span>游泳</div>
+                        <div class="grid-item pu"><span class="tag">普</span>水水</div>
+                        <!-- 粤语 -->
+                        <div class="grid-item yue"><span class="tag">粤</span>球球</div>
                     </div>
                 </div>
             </div>
             
-            <!-- 三字 - 2列网格 -->
+            <!-- 三字 -->
             <div class="cat">
                 <div class="cat-header">
                     <div class="cat-title">三字词语</div>
