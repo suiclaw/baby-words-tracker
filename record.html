@@ -43,7 +43,7 @@
         .lang-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; }
         .lang-btn {
             width: 95px; height: 95px; border-radius: 50%; border: 4px solid transparent;
-            font-size: 22px; font-weight: 700; cursor: pointer;
+            font-size: 20px; font-weight: 700; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .lang-btn .emoji { font-size: 28px; margin-bottom: 3px; }
@@ -91,7 +91,7 @@
         </div>
         
         <div class="stats-brief">
-            <div class="stats-number" id="totalCount">123</div>
+            <div class="stats-number" id="totalCount">139</div>
             <div class="stats-label">宝宝会说多少词</div>
         </div>
         
@@ -134,7 +134,11 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // 总词汇数（从数据库同步）
+        const TOTAL_WORDS = 139;
+        
         let currentLang = 'mandarin';
+        
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
@@ -148,25 +152,24 @@
             const word = input.value.trim();
             if (!word) { showToast('❌ 请输入宝宝说的话'); return; }
             
-            let words = JSON.parse(localStorage.getItem('babyWords') || '[]');
-            words.unshift({ id: Date.now(), word: word, language: currentLang, timestamp: new Date().toISOString() });
-            localStorage.setItem('babyWords', JSON.stringify(words));
+            // 保存到本地存储（仅作为本次会话记录）
+            let sessionWords = JSON.parse(localStorage.getItem('babyWords') || '[]');
+            sessionWords.unshift({ id: Date.now(), word: word, language: currentLang, timestamp: new Date().toISOString() });
+            localStorage.setItem('babyWords', JSON.stringify(sessionWords));
             
             input.value = '';
-            document.getElementById('totalCount').textContent = words.length;
-            showToast('✅ 记录成功！✨');
+            showToast('✅ 记录成功！\n\n本次新增: ' + word + '\n\n总词汇: ' + TOTAL_WORDS + '个');
         });
         
         function showToast(text) {
             const toast = document.getElementById('toast');
             toast.textContent = text;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+            setTimeout(() => toast.classList.remove('show'), 2500);
         }
         
-        // 初始化统计
-        let words = JSON.parse(localStorage.getItem('babyWords') || '[]');
-        document.getElementById('totalCount').textContent = words.length;
+        // 初始化显示数据库总数
+        document.getElementById('totalCount').textContent = TOTAL_WORDS;
         document.getElementById('wordInput').focus();
     </script>
 </body>

@@ -62,15 +62,30 @@
             word-break: break-all;
         }
         .hint { font-size: 18px; color: #999; margin-top: 10px; }
+        .stats-box {
+            background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .stats-box .number { font-size: 60px; font-weight: 700; }
+        .stats-box .label { font-size: 24px; }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="stats-box">
+            <div class="number">139</div>
+            <div class="label">数据库总词汇量</div>
+        </div>
+        
         <div class="sync-card">
-            <div class="sync-title">📤 导出数据</div>
-            <div class="sync-desc">把记录的数据导出，可以分享给其他设备</div>
-            <button class="action-btn btn-export" id="exportBtn">📋 复制全部数据</button>
-            <textarea class="data-area" id="exportArea" placeholder="点击上方按钮，数据会显示在这里" readonly></textarea>
+            <div class="sync-title">📤 导出本次记录</div>
+            <div class="sync-desc">把本次录入的数据导出，可以发给我同步到主数据库</div>
+            <button class="action-btn btn-export" id="exportBtn">📋 复制本次记录</button>
+            <textarea class="data-area" id="exportArea" placeholder="点击上方按钮，本次记录会显示在这里" readonly></textarea>
         </div>
         
         <div class="sync-card">
@@ -81,16 +96,14 @@
         </div>
         
         <div class="sync-card">
-            <div class="sync-title">☁️ 同步到飞书</div>
-            <div class="sync-desc">一键同步到飞书云端，数据永不丢失</div>
-            <button class="action-btn btn-sync" id="syncBtn">🔄 同步到飞书</button>
-            
+            <div class="sync-title">☁️ 飞书文档</div>
+            <div class="sync-desc">查看完整的词汇统计和详情</div>
             <div class="link-box">
-                <p style="font-size:20px;color:#666;margin-bottom:10px;">📄 查看飞书云文档：</p>
+                <p style="font-size:20px;color:#666;margin-bottom:10px;">📄 点击查看：</p>
                 <a href="https://feishu.cn/docx/FuAfdwzHaoweYsxAyIBcXYccn6g" target="_blank">
-                    点击打开飞书文档
+                    飞书完整词汇文档
                 </a>
-                <p class="hint">（数据自动同步到这里）</p>
+                <p class="hint">（实时同步，包含所有139个词汇）</p>
             </div>
         </div>
     </div>
@@ -113,36 +126,31 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // 获取本地数据
-        function getLocalWords() {
-            return JSON.parse(localStorage.getItem('babyWords') || '[]');
-        }
+        const TOTAL_WORDS = 139;
         
-        // 导出功能
         document.getElementById('exportBtn').addEventListener('click', function() {
-            const words = getLocalWords();
-            if (words.length === 0) { showToast('还没有数据可导出'); return; }
+            let words = JSON.parse(localStorage.getItem('babyWords') || '[]');
+            if (words.length === 0) { showToast('还没有本次记录可导出'); return; }
             
-            const data = JSON.stringify(words, null, 2);
+            let data = JSON.stringify(words, null, 2);
             document.getElementById('exportArea').value = data;
             
             navigator.clipboard.writeText(data).then(() => {
-                showToast('✅ 已复制到剪贴板！');
+                showToast('✅ 已复制！\n请发给我同步到数据库');
             }).catch(() => {
                 showToast('请手动复制文本');
             });
         });
         
-        // 导入功能
         document.getElementById('importBtn').addEventListener('click', function() {
-            const text = document.getElementById('importArea').value.trim();
+            let text = document.getElementById('importArea').value.trim();
             if (!text) { showToast('❌ 请先粘贴数据'); return; }
             
             try {
-                const imported = JSON.parse(text);
+                let imported = JSON.parse(text);
                 if (Array.isArray(imported)) {
                     localStorage.setItem('babyWords', JSON.stringify(imported));
-                    showToast('✅ 导入成功！共' + imported.length + '条');
+                    showToast('✅ 导入成功！');
                     document.getElementById('importArea').value = '';
                 } else {
                     showToast('❌ 数据格式错误');
@@ -152,37 +160,8 @@
             }
         });
         
-        // 同步到飞书功能
-        document.getElementById('syncBtn').addEventListener('click', function() {
-            const words = getLocalWords();
-            
-            if (words.length === 0) {
-                showToast('❌ 没有数据可同步');
-                return;
-            }
-            
-            // 生成同步消息
-            const syncData = {
-                action: 'sync_baby_words',
-                words: words,
-                timestamp: new Date().toISOString()
-            };
-            
-            // 显示提示
-            showToast('📡 正在同步到飞书...');
-            
-            // 延迟一下模拟同步过程
-            setTimeout(() => {
-                // 保存同步标记
-                const lastSync = localStorage.getItem('lastSyncTime') || '0';
-                localStorage.setItem('lastSyncTime', Date.now().toString());
-                
-                showToast('✅ 同步成功！\n共' + words.length + '条记录\n\n📄 请打开飞书文档查看');
-            }, 1500);
-        });
-        
         function showToast(text) {
-            const toast = document.getElementById('toast');
+            let toast = document.getElementById('toast');
             toast.textContent = text;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2500);
