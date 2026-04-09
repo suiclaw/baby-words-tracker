@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宝宝语言记录</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 40px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .baby-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 48px;
+            color: #FF69B4;
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            font-size: 28px;
+            color: #666;
+            margin-bottom: 50px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 35px;
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+            border: none;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(255, 99, 71, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 24px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-card">
+            <div class="baby-icon">👶</div>
+            <h1>宝宝语言记录</h1>
+            <p class="subtitle">记录每一个成长的瞬间</p>
+            
+            <a href="record.html" class="btn">📝 开始记录</a>
+            <a href="stats.html" class="btn btn-secondary">📊 查看统计</a>
+        </div>
+        <p class="footer">💕 用爱记录成长</p>
+    </div>
+</body>
+</html>
