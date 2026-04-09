@@ -91,7 +91,7 @@
         </div>
         
         <div class="stats-brief">
-            <div class="stats-number" id="totalCount">139</div>
+            <div class="stats-number" id="totalCount">137</div>
             <div class="stats-label">宝宝会说多少词</div>
         </div>
         
@@ -134,8 +134,7 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // 总词汇数（从数据库同步）
-        const TOTAL_WORDS = 139;
+        const TOTAL_WORDS = 137;
         
         let currentLang = 'mandarin';
         
@@ -152,7 +151,6 @@
             const word = input.value.trim();
             if (!word) { showToast('❌ 请输入宝宝说的话'); return; }
             
-            // 保存到本地存储（仅作为本次会话记录）
             let sessionWords = JSON.parse(localStorage.getItem('babyWords') || '[]');
             sessionWords.unshift({ id: Date.now(), word: word, language: currentLang, timestamp: new Date().toISOString() });
             localStorage.setItem('babyWords', JSON.stringify(sessionWords));
@@ -168,7 +166,6 @@
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
         
-        // 初始化显示数据库总数
         document.getElementById('totalCount').textContent = TOTAL_WORDS;
         document.getElementById('wordInput').focus();
     </script>
