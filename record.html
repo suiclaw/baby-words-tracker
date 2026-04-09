@@ -2,305 +2,133 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宝宝语言记录 - 录入</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --bg: #E8E4E1;
-            --card: rgba(255, 255, 255, 0.92);
-            --text: #5A534A;
-            --text-light: #8A827A;
-            --accent-1: #B8A99A;
-            --accent-2: #A8B5BA;
-            --accent-3: #B5C4B1;
-            --shadow: rgba(139, 119, 101, 0.12);
-        }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
-            background: var(--bg);
+            background: #F5EDE4;
             min-height: 100vh;
-            padding-bottom: 100px;
+            padding-bottom: 90px;
         }
-        
-        .container { max-width: 100%; margin: 0 auto; }
-        
-        /* 顶部 */
         .header {
-            background: linear-gradient(160deg, #D4CFC9 0%, #C9C4BE 100%);
+            background: linear-gradient(135deg, #E8C4B8 0%, #F5E6D8 100%);
             padding: 50px 28px 40px;
-            position: relative;
         }
-        
-        .header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-        
-        .header .subtitle {
-            font-size: 15px;
-            color: var(--text-light);
-        }
-        
-        /* 主卡片 */
+        h1 { font-size: 28px; font-weight: 600; color: #5D534A; margin-bottom: 8px; }
+        .subtitle { font-size: 15px; color: #8A827A; }
         .main-card {
             margin: -20px 24px 24px;
-            background: var(--card);
-            border-radius: 28px;
-            padding: 32px;
-            box-shadow: 0 16px 48px var(--shadow);
-            position: relative;
-            z-index: 10;
-        }
-        
-        /* 语言选择 */
-        .lang-section {
-            margin-bottom: 32px;
-        }
-        
-        .section-label {
-            font-size: 13px;
-            color: var(--text-light);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-        
-        .lang-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        
-        .lang-btn {
-            background: rgba(184,169,154,0.1);
-            border: 2px solid transparent;
-            border-radius: 20px;
-            padding: 20px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .lang-btn.selected {
-            background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
-            border-color: transparent;
-            box-shadow: 0 8px 24px rgba(139,119,101,0.25);
-        }
-        
-        .lang-btn .icon {
-            font-size: 32px;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .lang-btn .label {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text);
-        }
-        
-        .lang-btn.selected .label {
-            color: white;
-        }
-        
-        /* 输入区 */
-        .input-section {
-            margin-bottom: 32px;
-        }
-        
-        .word-input {
-            width: 100%;
-            padding: 24px;
-            font-size: 24px;
-            border: 2px solid rgba(184,169,154,0.2);
-            border-radius: 20px;
-            background: rgba(255,255,255,0.8);
-            color: var(--text);
-            text-align: center;
-            outline: none;
-            transition: all 0.3s;
-        }
-        
-        .word-input:focus {
-            border-color: var(--accent-1);
             background: white;
-            box-shadow: 0 8px 24px rgba(139,119,101,0.1);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 12px 32px rgba(139, 119, 101, 0.08);
         }
-        
-        .word-input::placeholder {
-            color: var(--text-light);
-            opacity: 0.5;
+        .section-label {
+            font-size: 13px; color: #8A827A;
+            letter-spacing: 2px; margin-bottom: 14px;
         }
-        
-        /* 提交按钮 */
-        .submit-btn {
-            width: 100%;
-            padding: 22px;
-            font-size: 18px;
-            font-weight: 600;
+        .lang-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+            margin-bottom: 28px;
+        }
+        .lang-btn {
+            background: #F5EDE4; border: 2px solid transparent;
+            border-radius: 16px; padding: 18px 10px;
+            text-align: center; cursor: pointer;
+        }
+        .lang-btn.selected {
+            background: linear-gradient(135deg, #D4A88C 0%, #E8C4B8 100%);
             color: white;
-            background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            box-shadow: 0 8px 28px rgba(139,119,101,0.3);
-            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(212, 168, 140, 0.3);
         }
-        
-        .submit-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 4px 16px rgba(139,119,101,0.25);
+        .lang-btn .icon { font-size: 28px; display: block; margin-bottom: 6px; }
+        .lang-btn .label { font-size: 14px; font-weight: 500; color: #5D534A; }
+        .lang-btn.selected .label { color: white; }
+        .word-input {
+            width: 100%; padding: 20px; font-size: 22px;
+            border: 2px solid #F0E8E0; border-radius: 16px;
+            background: #FDFBF8; color: #5D534A;
+            text-align: center; outline: none;
         }
-        
-        /* 提示卡片 */
+        .word-input:focus { border-color: #D4A88C; background: white; }
+        .submit-btn {
+            width: 100%; padding: 18px; margin-top: 20px;
+            font-size: 17px; font-weight: 600; color: white;
+            background: linear-gradient(135deg, #D4A88C 0%, #E8C4B8 100%);
+            border: none; border-radius: 16px; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(212, 168, 140, 0.3);
+        }
         .tip-card {
             margin: 0 24px;
-            background: rgba(184,169,154,0.1);
-            border-radius: 20px;
-            padding: 20px;
+            background: #F5EDE4; border-radius: 16px; padding: 18px;
         }
-        
-        .tip-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-        
-        .tip-text {
-            font-size: 13px;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-        
-        .tip-text code {
-            background: rgba(184,169,154,0.2);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-        }
-        
-        /* 底部导航 */
+        .tip-title { font-size: 14px; font-weight: 600; color: #5D534A; margin-bottom: 6px; }
+        .tip-text { font-size: 13px; color: #8A827A; line-height: 1.6; }
+        code { background: #E8DDD4; padding: 2px 8px; border-radius: 6px; font-size: 12px; }
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: fixed; bottom: 0; left: 0; right: 0;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 16px 0 24px;
-            box-shadow: 0 -8px 32px var(--shadow);
+            display: flex; justify-content: space-around;
+            padding: 14px 0 20px;
+            box-shadow: 0 -4px 20px rgba(139, 119, 101, 0.08);
         }
-        
-        .nav-item {
-            flex: 1;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-light);
-            font-size: 11px;
-            transition: all 0.3s;
-        }
-        
-        .nav-item.active {
-            color: var(--accent-1);
-        }
-        
-        .nav-item .icon {
-            font-size: 22px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        
-        /* Toast */
+        .nav-item { flex: 1; text-align: center; text-decoration: none; color: #8A827A; font-size: 11px; }
+        .nav-item.active { color: #D4A88C; }
+        .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
         .toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
+            position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(90, 83, 74, 0.95);
-            color: white;
-            padding: 20px 32px;
-            border-radius: 16px;
-            font-size: 15px;
-            display: none;
-            z-index: 1000;
-            text-align: center;
+            background: rgba(90, 83, 74, 0.95); color: white;
+            padding: 18px 28px; border-radius: 14px; font-size: 15px;
+            display: none; z-index: 1000; text-align: center;
         }
-        
         .toast.show { display: block; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎙️ 记录新词</h1>
-            <p class="subtitle">宝宝今天说了什么？</p>
+    <div class="header">
+        <h1>🎙️ 记录新词</h1>
+        <p class="subtitle">宝宝今天说了什么？</p>
+    </div>
+    <div class="main-card">
+        <div class="section-label">SELECT LANGUAGE</div>
+        <div class="lang-grid">
+            <div class="lang-btn selected" data-lang="mandarin">
+                <span class="icon">🇨🇳</span>
+                <span class="label">普通话</span>
+            </div>
+            <div class="lang-btn" data-lang="cantonese">
+                <span class="icon">🗣️</span>
+                <span class="label">粤语</span>
+            </div>
+            <div class="lang-btn" data-lang="english">
+                <span class="icon">🇬🇧</span>
+                <span class="label">英语</span>
+            </div>
         </div>
-        
-        <div class="main-card">
-            <div class="lang-section">
-                <div class="section-label">Select Language</div>
-                <div class="lang-grid">
-                    <div class="lang-btn selected" data-lang="mandarin">
-                        <span class="icon">🇨🇳</span>
-                        <span class="label">普通话</span>
-                    </div>
-                    <div class="lang-btn" data-lang="cantonese">
-                        <span class="icon">🗣️</span>
-                        <span class="label">粤语</span>
-                    </div>
-                    <div class="lang-btn" data-lang="english">
-                        <span class="icon">🇬🇧</span>
-                        <span class="label">英语</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="input-section">
-                <div class="section-label">What did baby say?</div>
-                <input type="text" class="word-input" id="wordInput" placeholder="例如：妈妈、抱抱">
-            </div>
-            
-            <button class="submit-btn" id="submitBtn">✓ 确认记录</button>
-        </div>
-        
-        <div class="tip-card">
-            <div class="tip-title">💡 记录提示</div>
-            <div class="tip-text">
-                如果宝宝只说了一个词的一部分，可以用括号标注：<br>
-                <code>（手）机</code> 表示宝宝只说了"机"字
-            </div>
+        <div class="section-label">WHAT DID BABY SAY?</div>
+        <input type="text" class="word-input" id="wordInput" placeholder="例如：妈妈、抱抱">
+        <button class="submit-btn" id="submitBtn">✓ 确认记录</button>
+    </div>
+    <div class="tip-card">
+        <div class="tip-title">💡 记录提示</div>
+        <div class="tip-text">
+            如果宝宝只说了一个词的一部分，可以用括号标注：<br>
+            <code>（手）机</code> 表示宝宝只说了"机"字
         </div>
     </div>
-    
     <div class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <span class="icon">🏠</span>
-            首页
-        </a>
-        <a href="record.html" class="nav-item active">
-            <span class="icon">📝</span>
-            录入
-        </a>
-        <a href="stats-v2.html" class="nav-item">
-            <span class="icon">📊</span>
-            统计
-        </a>
+        <a href="index.html" class="nav-item"><span class="icon">🏠</span>首页</a>
+        <a href="record.html" class="nav-item active"><span class="icon">📝</span>录入</a>
+        <a href="stats-v2.html" class="nav-item"><span class="icon">📊</span>统计</a>
     </div>
-    
     <div class="toast" id="toast"></div>
-
     <script>
         const TOTAL_WORDS = 135;
         let currentLang = 'mandarin';
-        
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
@@ -308,27 +136,22 @@
                 currentLang = this.dataset.lang;
             });
         });
-        
         document.getElementById('submitBtn').addEventListener('click', function() {
             const input = document.getElementById('wordInput');
             const word = input.value.trim();
             if (!word) { showToast('请输入宝宝说的话'); return; }
-            
             let sessionWords = JSON.parse(localStorage.getItem('babyWords') || '[]');
             sessionWords.unshift({ id: Date.now(), word: word, language: currentLang, timestamp: new Date().toISOString() });
             localStorage.setItem('babyWords', JSON.stringify(sessionWords));
-            
             input.value = '';
             showToast('✓ 记录成功！\n\n本次新增: ' + word + '\n总词汇: ' + TOTAL_WORDS + '个');
         });
-        
         function showToast(text) {
             const toast = document.getElementById('toast');
             toast.textContent = text;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
-        
         document.getElementById('wordInput').focus();
     </script>
 </body>
