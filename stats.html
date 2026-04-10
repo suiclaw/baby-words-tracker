@@ -6,144 +6,447 @@
     <title>宝宝语言记录 - 统计</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #FCF7F0;
+            --card: #FFFFFF;
+            --text: #5D534A;
+            --text-light: #8A827A;
+            --accent-orange: #F5C4A8;
+            --accent-green: #B8D4B8;
+            --accent-blue: #A8C8E8;
+            --shadow: rgba(139, 119, 101, 0.06);
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            background: var(--bg);
             min-height: 100vh;
-            padding: 20px 20px 120px 20px;
+            padding-bottom: 90px;
         }
-        .container { max-width: 480px; margin: 0 auto; }
-        .stats-header {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 30px;
+        
+        /* 电脑适配 - 限制最大宽度 */
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #FFE8DC 0%, #FFF4EE 100%);
+            padding: 40px 24px;
             text-align: center;
+        }
+        
+        .hero-num {
+            font-size: 72px;
+            font-weight: 300;
+            color: #E89870;
+            line-height: 1;
+        }
+        
+        .hero-num span {
+            font-size: 24px;
+            font-weight: 400;
+            color: #B8A090;
+        }
+        
+        .hero-label {
+            font-size: 14px;
+            color: #B8A090;
+            margin-top: 8px;
+            letter-spacing: 3px;
+        }
+        
+        .content { padding: 20px; }
+        
+        /* 语言大类卡片 */
+        .lang-section {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+        
+        .lang-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #F5F0EB;
         }
-        .stats-header h2 { font-size: 36px; color: #333; margin-bottom: 20px; }
-        .total-box {
-            background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
-            border-radius: 20px;
-            padding: 30px;
-            color: white;
+        
+        .lang-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #5D534A;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .total-number { font-size: 72px; font-weight: 700; }
-        .total-label { font-size: 28px; }
-        .category-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 25px;
-            margin-bottom: 15px;
+        
+        .lang-num {
+            font-size: 36px;
+            font-weight: 700;
         }
-        .category-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+        
+        .lang-num.pu { color: #E89870; }
+        .lang-num.yue { color: #78A878; }
+        .lang-num.en { color: #6898C8; }
+        
+        /* 小类标题 */
+        .cat-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8A827A;
+            margin: 16px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .category-title { font-size: 30px; font-weight: 700; color: #333; }
-        .category-count { font-size: 24px; color: #FF69B4; font-weight: 600; }
-        .category-content { font-size: 20px; color: #555; line-height: 1.8; word-break: break-all; }
-        .lang-tag {
-            display: inline-block; padding: 5px 12px; border-radius: 15px;
-            font-size: 18px; margin-right: 8px; margin-bottom: 5px;
+        
+        .cat-num {
+            font-size: 20px;
+            font-weight: 700;
+            color: #E89870;
         }
-        .tag-mandarin { background: #FFB6C1; color: white; }
-        .tag-cantonese { background: #FFD700; color: white; }
-        .tag-english { background: #87CEEB; color: white; }
+        
+        /* 词汇网格 - 智能自适应 */
+        .word-grid {
+            display: grid;
+            gap: 8px;
+            /* 手机：单字一行6个，电脑：自动更多 */
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        }
+        
+        @media (max-width: 768px) {
+            /* 手机：固定6个 */
+            .word-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+        
+        .word-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 500;
+            color: #5D534A;
+        }
+        
+        .word-item.pu {
+            background: linear-gradient(135deg, #FFF5EE 0%, #FFE8DC 100%);
+        }
+        
+        .word-item.yue {
+            background: linear-gradient(135deg, #E8F5E8 0%, #D8ECD8 100%);
+        }
+        
+        .word-item.en {
+            background: linear-gradient(135deg, #E8F0FF 0%, #D8E5FF 100%);
+        }
+        
+        /* 双字词汇网格 - 智能自适应 */
+        .word-grid-2 {
+            display: grid;
+            gap: 10px;
+            /* 自动适配：最小100px，自动填满 */
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        }
+        
+        @media (max-width: 768px) {
+            /* 手机：固定4个 */
+            .word-grid-2 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* 小手机：3个 */
+            .word-grid-2 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .word-item-2 {
+            padding: 14px 12px;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #5D534A;
+        }
+        
+        .word-item-2.pu {
+            background: linear-gradient(135deg, #FFF5EE 0%, #FFE8DC 100%);
+        }
+        
+        .word-item-2.yue {
+            background: linear-gradient(135deg, #E8F5E8 0%, #D8ECD8 100%);
+        }
+        
+        .word-item-2.en {
+            background: linear-gradient(135deg, #E8F0FF 0%, #D8E5FF 100%);
+        }
+        
+        /* 英语词汇带中文 */
+        .english-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #E8F0FF 0%, #D8E5FF 100%);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .english-word {
+            font-size: 20px;
+            font-weight: 600;
+            color: #5D534A;
+        }
+        
+        .english-cn {
+            font-size: 16px;
+            color: #8A827A;
+        }
+        
+        /* 底部导航 */
         .bottom-nav {
-            position: fixed; bottom: 0; left: 0; right: 0; background: white;
-            display: flex; justify-content: space-around; padding: 10px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0 20px;
+            box-shadow: 0 -4px 20px var(--shadow);
         }
-        .nav-item { flex: 1; text-align: center; padding: 10px; text-decoration: none; }
-        .nav-item.active { color: #FF69B4; }
-        .nav-icon { font-size: 32px; display: block; margin-bottom: 5px; }
-        .nav-text { font-size: 22px; font-weight: 500; color: #333; }
+        
+        .nav-inner {
+            display: flex;
+            justify-content: space-around;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .nav-item {
+            text-align: center;
+            text-decoration: none;
+            color: #8A827A;
+            font-size: 11px;
+            padding: 0 20px;
+        }
+        
+        .nav-item.active { color: #E89870; }
+        .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="stats-header">
-            <h2>📊 宝宝语言统计</h2>
-            <div class="total-box">
-                <div class="total-number">135</div>
-                <div class="total-label">总词汇</div>
-            </div>
+        <div class="hero">
+            <div class="hero-num" id="totalWords">150<span>词</span></div>
+            <div class="hero-label">VOCABULARY</div>
         </div>
         
-        <div class="category-card">
-            <div class="category-header">
-                <div class="category-title">🌸 单字词汇</div>
-                <div class="category-count">94个</div>
-            </div>
-            <div class="category-content">
-                <span class="lang-tag tag-mandarin">普通话</span>
-                <br><br>
-                要 · 书 · 喂 · 果 · 调 · 饱 · 鱼 · 菜 · 煲 · 被 · 鼻 · 波 · 茶 · 穿 · 灯 · 袜 · 鞋 · 蟹 · 牙 · 羊 · 药 · 叶 · 衣 · 汁 · 羹 · 仔 · 姊 · 虾 · 包 · 猫 · 帽 · 妹 · 面 · 拿 · 笛 · 掉 · 锤 · 鼓 · 洗 · 码 · 摇 · 飞 · 机 · 鸟 · 熊 · 厕 · 所 · 卷 · 表 · 家 · 带 · 我 · 亮 · 鹅 · 纸 · 眼 · 耳 · 手 · 趴 · 爬 · 记 · 锁 · 盖 · 挂 · 视 · 蕉 · 糕 · 哭 · 腿 · 琴 · 拍 · 照 · 放 · 多 · 贴 · 背 · 歌 · 箱 · 椅 · 凳 · 牙 · 跳 · 看 · 杯 · 筷 · 叉 · 勺 · 姨 · 瓜 · 鸡 · 蕉
-            </div>
-        </div>
-        
-        <div class="category-card">
-            <div class="category-header">
-                <div class="category-title">🌺 带括号词</div>
-                <div class="category-count">15个</div>
-            </div>
-            <div class="category-content">
-                <span class="lang-tag tag-mandarin">普通话</span>
-                <br><br>
-                （山）药 · （阿）姨 · （面）包 · （手）臂 · （幼儿）园 · （手）机 · （眼）镜 · （拐）杖 · （耳）机 · （音）箱 · （恐）龙 · （红）薯 · （苹）果 · （西）瓜 · （香）蕉
-            </div>
-        </div>
-        
-        <div class="category-card">
-            <div class="category-header">
-                <div class="category-title">🌼 两字词语</div>
-                <div class="category-count">28个</div>
-            </div>
-            <div class="category-content">
-                <span class="lang-tag tag-mandarin">普通话</span>
-                <span class="lang-tag tag-cantonese">粤语</span>
-                <br><br>
-                妈妈 · 妈咪 · 阿嫲 · 爷爷 · 奶奶 · 哥哥 · 姐姐 · 弟弟 · 妹妹 · 叔叔 · 面面 · 包包 · 饼饼 · 肉肉 · 糖糖 · 蛋蛋 · 桃桃 · 月月 · 高高 · 喵喵 · 咚咚 · 圆圆 · 拍照 · 吸管 · 膏膏 · 游泳 · 水水 · 球球 · 丑丑
-            </div>
-        </div>
-        
-        <div class="category-card">
-            <div class="category-header">
-                <div class="category-title">🌻 三字词语</div>
-                <div class="category-count">5个</div>
-            </div>
-            <div class="category-content">
-                <span class="lang-tag tag-mandarin">普通话</span>
-                <br><br>
-                呱呱呱 · 我也要 · 你也要 · 抱抱我 · 一点点
-            </div>
-        </div>
-        
-        <div class="category-card">
-            <div class="category-header">
-                <div class="category-title">🇬🇧 英语单词</div>
-                <div class="category-count">7个</div>
-            </div>
-            <div class="category-content">
-                <span class="lang-tag tag-english">英语</span>
-                <br><br>
-                peepee · poopoo · phone · spoon · moon · Apple · ball
-            </div>
+        <div class="content" id="content">
+            <!-- 动态加载 -->
         </div>
     </div>
     
     <div class="bottom-nav">
-        <a href="record.html" class="nav-item">
-            <span class="nav-icon">📝</span>
-            <span class="nav-text">录入</span>
-        </a>
-        <a href="stats.html" class="nav-item active">
-            <span class="nav-icon">📊</span>
-            <span class="nav-text">统计</span>
-        </a>
-        <a href="sync.html" class="nav-item">
-            <span class="nav-icon">📤</span>
-            <span class="nav-text">导入导出</span>
-        </a>
+        <div class="nav-inner">
+            <a href="record.html" class="nav-item">
+                <span class="icon">📝</span>
+                录入
+            </a>
+            <a href="stats.html" class="nav-item active">
+                <span class="icon">📊</span>
+                统计
+            </a>
+        </div>
     </div>
+
+    <script>
+        // 验证邀请码
+        if (localStorage.getItem('inviteCodeVerified') !== 'true') {
+            window.location.href = '/';
+        }
+        
+        // 英语词汇中文映射
+        const englishMap = {
+            'peepee': '尿尿',
+            'poopoo': '便便',
+            'phone': '电话',
+            'spoon': '勺子',
+            'moon': '月亮',
+            'Apple': '苹果',
+            'ball': '球'
+        };
+        
+        // 加载数据
+        fetch('/api/words')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('totalWords').innerHTML = data.totalWords + '<span>词</span>';
+                
+                let html = '';
+                
+                // 普通话
+                if (data.byLanguage && data.byLanguage['普通话']) {
+                    const pu = data.byLanguage['普通话'];
+                    const puTotal = (pu['单字']?.count || 0) + (pu['双字']?.count || 0) + 
+                                    (pu['三字']?.count || 0) + (pu['句子']?.count || 0);
+                    
+                    html += `
+                        <div class="lang-section">
+                            <div class="lang-header">
+                                <div class="lang-title">🗣️ 普通话</div>
+                                <div class="lang-num pu">${puTotal}</div>
+                            </div>
+                    `;
+                    
+                    // 单字
+                    if (pu['单字'] && pu['单字'].words && pu['单字'].words.length > 0) {
+                        // 分离带括号和不带括号的词
+                        const bracketWords = pu['单字'].words.filter(w => w.includes('（') || w.includes('('));
+                        const normalWords = pu['单字'].words.filter(w => !w.includes('（') && !w.includes('('));
+                        
+                        // 普通单字
+                        if (normalWords.length > 0) {
+                            html += `
+                                <div class="cat-title">单字词汇 <span class="cat-num">${normalWords.length}</span></div>
+                                <div class="word-grid">
+                            `;
+                            normalWords.forEach(w => {
+                                html += `<div class="word-item pu">${w}</div>`;
+                            });
+                            html += `</div>`;
+                        }
+                        
+                        // 带括号的词（用更宽的网格）
+                        if (bracketWords.length > 0) {
+                            html += `
+                                <div class="cat-title">带括号的词 <span class="cat-num">${bracketWords.length}</span></div>
+                                <div class="word-grid-2">
+                            `;
+                            bracketWords.forEach(w => {
+                                html += `<div class="word-item-2 pu">${w}</div>`;
+                            });
+                            html += `</div>`;
+                        }
+                    }
+                    
+                    // 双字
+                    if (pu['双字'] && pu['双字'].words && pu['双字'].words.length > 0) {
+                        html += `
+                            <div class="cat-title">双字词语 <span class="cat-num">${pu['双字'].count}</span></div>
+                            <div class="word-grid-2">
+                        `;
+                        pu['双字'].words.forEach(w => {
+                            html += `<div class="word-item-2 pu">${w}</div>`;
+                        });
+                        html += `</div>`;
+                    }
+                    
+                    // 三字
+                    if (pu['三字'] && pu['三字'].words && pu['三字'].words.length > 0) {
+                        html += `
+                            <div class="cat-title">三字词语 <span class="cat-num">${pu['三字'].count}</span></div>
+                            <div class="word-grid-2">
+                        `;
+                        pu['三字'].words.forEach(w => {
+                            html += `<div class="word-item-2 pu">${w}</div>`;
+                        });
+                        html += `</div>`;
+                    }
+                    
+                    html += `</div>`;
+                }
+                
+                // 广东话
+                if (data.byLanguage && data.byLanguage['广东话']) {
+                    const yue = data.byLanguage['广东话'];
+                    const yueTotal = (yue['单字']?.count || 0) + (yue['双字']?.count || 0) + 
+                                     (yue['三字']?.count || 0) + (yue['句子']?.count || 0);
+                    
+                    html += `
+                        <div class="lang-section">
+                            <div class="lang-header">
+                                <div class="lang-title">🎯 广东话</div>
+                                <div class="lang-num yue">${yueTotal}</div>
+                            </div>
+                    `;
+                    
+                    // 单字
+                    if (yue['单字'] && yue['单字'].words && yue['单字'].words.length > 0) {
+                        html += `
+                            <div class="cat-title">单字词汇 <span class="cat-num">${yue['单字'].count}</span></div>
+                            <div class="word-grid">
+                        `;
+                        yue['单字'].words.forEach(w => {
+                            html += `<div class="word-item yue">${w}</div>`;
+                        });
+                        html += `</div>`;
+                    }
+                    
+                    // 双字
+                    if (yue['双字'] && yue['双字'].words && yue['双字'].words.length > 0) {
+                        html += `
+                            <div class="cat-title">双字词语 <span class="cat-num">${yue['双字'].count}</span></div>
+                            <div class="word-grid-2">
+                        `;
+                        yue['双字'].words.forEach(w => {
+                            html += `<div class="word-item-2 yue">${w}</div>`;
+                        });
+                        html += `</div>`;
+                    }
+                    
+                    html += `</div>`;
+                }
+                
+                // 英语
+                if (data.byLanguage && data.byLanguage['英语']) {
+                    const en = data.byLanguage['英语'];
+                    const enTotal = (en['单字']?.count || 0) + (en['双字']?.count || 0) + 
+                                    (en['三字']?.count || 0) + (en['句子']?.count || 0);
+                    
+                    html += `
+                        <div class="lang-section">
+                            <div class="lang-header">
+                                <div class="lang-title">🇬🇧 英语</div>
+                                <div class="lang-num en">${enTotal}</div>
+                            </div>
+                    `;
+                    
+                    // 英语词汇
+                    if (en['句子'] && en['句子'].words && en['句子'].words.length > 0) {
+                        en['句子'].words.forEach(w => {
+                            const cn = englishMap[w] || '';
+                            html += `
+                                <div class="english-item">
+                                    <span class="english-word">${w}</span>
+                                    <span class="english-cn">${cn}</span>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    html += `</div>`;
+                }
+                
+                document.getElementById('content').innerHTML = html;
+            })
+            .catch(err => {
+                console.error('加载数据失败', err);
+                document.getElementById('content').innerHTML = '<p style="text-align:center;padding:40px;color:#999;">加载失败，请刷新重试</p>';
+            });
+    </script>
 </body>
 </html>

@@ -2,98 +2,187 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>宝宝语言记录</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
-            background: #F5EDE4;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding-bottom: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        .hero {
-            background: linear-gradient(135deg, #E8C4B8 0%, #F5E6D8 100%);
-            padding: 60px 28px 50px;
+        
+        .login-container {
+            background: white;
+            border-radius: 30px;
+            padding: 50px 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
-        .avatar {
-            width: 100px; height: 100px;
-            background: linear-gradient(135deg, #D4A88C 0%, #E8C4B8 100%);
-            border-radius: 50%;
-            margin: 0 auto 24px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 48px;
-            box-shadow: 0 12px 32px rgba(212, 168, 140, 0.3);
+        
+        .baby-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
         }
-        h1 { font-size: 32px; font-weight: 600; color: #5D534A; margin-bottom: 8px; }
-        .subtitle { font-size: 15px; color: #8A827A; margin-bottom: 32px; }
-        .stats-box {
-            background: white;
+        
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #999;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .input-wrapper {
+            margin-bottom: 30px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            border: 3px solid #eee;
             border-radius: 20px;
-            padding: 24px;
-            display: flex; align-items: center; gap: 20px;
-            box-shadow: 0 8px 24px rgba(139, 119, 101, 0.08);
+            outline: none;
+            transition: border-color 0.3s;
         }
-        .stats-num { font-size: 52px; font-weight: 300; color: #D4A88C; }
-        .stats-label { font-size: 14px; color: #8A827A; }
-        .actions { padding: 28px; }
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .btn-card {
-            background: white;
-            border-radius: 18px;
-            padding: 28px 20px;
-            text-align: center;
-            text-decoration: none;
-            box-shadow: 0 6px 20px rgba(139, 119, 101, 0.08);
+        
+        input[type="text"]:focus {
+            border-color: #667eea;
         }
-        .btn-icon {
-            width: 56px; height: 56px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 12px; font-size: 28px;
+        
+        input[type="text"]::placeholder {
+            color: #ccc;
+            font-size: 18px;
         }
-        .btn-card.primary .btn-icon { background: linear-gradient(135deg, #D4A88C 0%, #E8C4B8 100%); }
-        .btn-card.secondary .btn-icon { background: linear-gradient(135deg, #C4D6C4 0%, #D4E4D4 100%); }
-        .btn-card .label { font-size: 16px; font-weight: 600; color: #5D534A; }
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around;
-            padding: 14px 0 20px;
-            box-shadow: 0 -4px 20px rgba(139, 119, 101, 0.08);
+        
+        .error-msg {
+            color: #ff4757;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
         }
-        .nav-item { flex: 1; text-align: center; text-decoration: none; color: #8A827A; font-size: 11px; }
-        .nav-item.active { color: #D4A88C; }
-        .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
+        
+        .error-msg.show {
+            display: block;
+        }
+        
+        button {
+            width: 100%;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .hint {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #999;
+            line-height: 1.6;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .shake {
+            animation: shake 0.3s;
+        }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <div class="avatar">👶</div>
-        <h1>宝宝语言</h1>
-        <p class="subtitle">记录每一个成长的瞬间</p>
-        <div class="stats-box">
-            <div class="stats-num">132</div>
-            <div class="stats-label">已记录词汇</div>
+    <div class="login-container">
+        <div class="baby-icon">👶</div>
+        <h1>宝宝语言记录</h1>
+        <p class="subtitle">首次访问请输入邀请码<br>之后无需再输入</p>
+        
+        <div class="input-wrapper">
+            <input type="text" id="inviteCode" placeholder="请输入邀请码" maxlength="20" autocomplete="off">
+            <p class="error-msg" id="errorMsg">邀请码错误，请重试</p>
         </div>
+        
+        <button onclick="checkInviteCode()">进入</button>
+        
+        <p class="hint">💡 提示：忘记邀请码请联系小白<br>邀请码只需输入一次</p>
     </div>
-    <div class="actions">
-        <div class="btn-grid">
-            <a href="record.html" class="btn-card primary">
-                <div class="btn-icon">✏️</div>
-                <div class="label">记录新词</div>
-            </a>
-            <a href="stats-v2.html" class="btn-card secondary">
-                <div class="btn-icon">📊</div>
-                <div class="label">查看统计</div>
-            </a>
-        </div>
-    </div>
-    <div class="bottom-nav">
-        <a href="index.html" class="nav-item active"><span class="icon">🏠</span>首页</a>
-        <a href="record.html" class="nav-item"><span class="icon">📝</span>录入</a>
-        <a href="stats-v2.html" class="nav-item"><span class="icon">📊</span>统计</a>
-    </div>
+    
+    <script>
+        // 正确邀请码（可以随时改）
+        const CORRECT_CODE = 'baobao2026';
+        
+        // 检查是否已有邀请码
+        if (localStorage.getItem('inviteCodeVerified') === 'true') {
+            window.location.href = '/record.html';
+        }
+        
+        // 检查邀请码
+        function checkInviteCode() {
+            const input = document.getElementById('inviteCode');
+            const errorMsg = document.getElementById('errorMsg');
+            const code = input.value.trim();
+            
+            if (code === CORRECT_CODE) {
+                // 邀请码正确，保存到localStorage
+                localStorage.setItem('inviteCodeVerified', 'true');
+                localStorage.setItem('inviteCode', code);
+                window.location.href = '/record.html';
+            } else {
+                // 邀请码错误
+                errorMsg.classList.add('show');
+                input.classList.add('shake');
+                input.value = '';
+                
+                setTimeout(() => {
+                    input.classList.remove('shake');
+                }, 300);
+            }
+        }
+        
+        // 回车提交
+        document.getElementById('inviteCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkInviteCode();
+            }
+        });
+        
+        // 输入时隐藏错误提示
+        document.getElementById('inviteCode').addEventListener('input', function() {
+            document.getElementById('errorMsg').classList.remove('show');
+        });
+    </script>
 </body>
 </html>

@@ -6,129 +6,292 @@
     <title>宝宝语言记录 - 录入</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #FCF7F0;
+            --card: #FFFFFF;
+            --text: #5D534A;
+            --accent-orange: #F5C4A8;
+            --accent-green: #B8D4B8;
+            --accent-blue: #A8C8E8;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
-            background: #F5EDE4;
+            background: var(--bg);
             min-height: 100vh;
+            padding: 20px;
             padding-bottom: 90px;
         }
-        .header {
-            background: linear-gradient(135deg, #E8C4B8 0%, #F5E6D8 100%);
-            padding: 50px 28px 40px;
+        
+        /* 电脑适配 */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
         }
-        h1 { font-size: 28px; font-weight: 600; color: #5D534A; margin-bottom: 8px; }
-        .subtitle { font-size: 15px; color: #8A827A; }
-        .main-card {
-            margin: -20px 24px 24px;
-            background: white;
-            border-radius: 24px;
-            padding: 28px;
-            box-shadow: 0 12px 32px rgba(139, 119, 101, 0.08);
+        
+        .header-card {
+            background: var(--card);
+            border-radius: 25px;
+            padding: 35px 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(139, 119, 101, 0.06);
         }
-        .section-label {
-            font-size: 13px; color: #8A827A;
-            letter-spacing: 2px; margin-bottom: 14px;
+        
+        .baby-icon { font-size: 60px; margin-bottom: 10px; }
+        .header-card h1 { font-size: 32px; color: #E89870; margin-bottom: 5px; font-weight: 600; }
+        .header-card p { font-size: 16px; color: #8A827A; }
+        
+        .stats-brief {
+            background: linear-gradient(135deg, #FFE8DC 0%, #FFF5EE 100%);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #5D534A;
         }
-        .lang-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-            margin-bottom: 28px;
+        
+        .stats-number { font-size: 56px; font-weight: 600; color: #E89870; }
+        .stats-label { font-size: 18px; color: #B8A090; margin-top: 5px; }
+        
+        .record-card {
+            background: var(--card);
+            border-radius: 25px;
+            padding: 30px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(139, 119, 101, 0.06);
         }
+        
+        .section-title { 
+            font-size: 24px; 
+            color: #5D534A; 
+            text-align: center; 
+            margin-bottom: 25px; 
+            font-weight: 600;
+        }
+        
+        .lang-buttons { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 30px; 
+        }
+        
         .lang-btn {
-            background: #F5EDE4; border: 2px solid transparent;
-            border-radius: 16px; padding: 18px 10px;
-            text-align: center; cursor: pointer;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
         }
-        .lang-btn.selected {
-            background: linear-gradient(135deg, #D4A88C 0%, #E8C4B8 100%);
-            color: white;
-            box-shadow: 0 6px 20px rgba(212, 168, 140, 0.3);
+        
+        .lang-btn .emoji { font-size: 24px; margin-bottom: 3px; }
+        
+        /* 莫迪色系 - 普通话（橙色系） */
+        .lang-btn.mandarin { 
+            background: linear-gradient(135deg, #FFE8DC 0%, #FFF5EE 100%); 
+            color: #5D534A; 
         }
-        .lang-btn .icon { font-size: 28px; display: block; margin-bottom: 6px; }
-        .lang-btn .label { font-size: 14px; font-weight: 500; color: #5D534A; }
-        .lang-btn.selected .label { color: white; }
+        .lang-btn.mandarin.selected { 
+            background: linear-gradient(135deg, #F5C4A8 0%, #FFAB76 100%); 
+            transform: scale(1.1); 
+            box-shadow: 0 8px 20px rgba(245, 196, 168, 0.4);
+            border-color: #E89870;
+        }
+        
+        /* 莫迪色系 - 粤语（绿色系） */
+        .lang-btn.cantonese { 
+            background: linear-gradient(135deg, #E8F5E8 0%, #F5FFF5 100%); 
+            color: #5D534A; 
+        }
+        .lang-btn.cantonese.selected { 
+            background: linear-gradient(135deg, #B8D4B8 0%, #98C4A8 100%); 
+            transform: scale(1.1); 
+            box-shadow: 0 8px 20px rgba(152, 192, 152, 0.4);
+            border-color: #7AAA7A;
+        }
+        
+        /* 莫迪色系 - 英语（蓝色系） */
+        .lang-btn.english { 
+            background: linear-gradient(135deg, #E8F0FF 0%, #F5F8FF 100%); 
+            color: #5D534A; 
+        }
+        .lang-btn.english.selected { 
+            background: linear-gradient(135deg, #A8C8E8 0%, #88B0E0 100%); 
+            transform: scale(1.1); 
+            box-shadow: 0 8px 20px rgba(136, 176, 224, 0.4);
+            border-color: #6A9AD8;
+        }
+        
+        .input-area { margin-bottom: 25px; }
+        .input-label { 
+            font-size: 18px; 
+            color: #8A827A; 
+            margin-bottom: 12px; 
+            display: block; 
+            text-align: center; 
+        }
+        
         .word-input {
-            width: 100%; padding: 20px; font-size: 22px;
-            border: 2px solid #F0E8E0; border-radius: 16px;
-            background: #FDFBF8; color: #5D534A;
-            text-align: center; outline: none;
+            width: 100%;
+            padding: 20px;
+            font-size: 28px;
+            border: 2px solid #E8E0D8;
+            border-radius: 15px;
+            background: #FFF8F5;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s, background 0.3s;
+            color: #5D534A;
         }
-        .word-input:focus { border-color: #D4A88C; background: white; }
-        .submit-btn {
-            width: 100%; padding: 18px; margin-top: 20px;
-            font-size: 17px; font-weight: 600; color: white;
-            background: linear-gradient(135deg, #D4A88C 0%, #E8C4B8 100%);
-            border: none; border-radius: 16px; cursor: pointer;
-            box-shadow: 0 6px 20px rgba(212, 168, 140, 0.3);
+        
+        .word-input:focus { 
+            border-color: #E89870; 
+            background: white; 
         }
-        .tip-card {
-            margin: 0 24px;
-            background: #F5EDE4; border-radius: 16px; padding: 18px;
+        
+        .word-input::placeholder {
+            color: #B8A090;
+            font-size: 20px;
         }
-        .tip-title { font-size: 14px; font-weight: 600; color: #5D534A; margin-bottom: 6px; }
-        .tip-text { font-size: 13px; color: #8A827A; line-height: 1.6; }
-        code { background: #E8DDD4; padding: 2px 8px; border-radius: 6px; font-size: 12px; }
+        
+        .record-btn {
+            width: 100%;
+            padding: 25px;
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #E89870 0%, #D88060 100%);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(232, 152, 112, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .record-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(232, 152, 112, 0.4);
+        }
+        
+        .record-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* 底部导航 */
         .bottom-nav {
-            position: fixed; bottom: 0; left: 0; right: 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around;
-            padding: 14px 0 20px;
-            box-shadow: 0 -4px 20px rgba(139, 119, 101, 0.08);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0 20px;
+            box-shadow: 0 -4px 20px rgba(139, 119, 101, 0.06);
         }
-        .nav-item { flex: 1; text-align: center; text-decoration: none; color: #8A827A; font-size: 11px; }
-        .nav-item.active { color: #D4A88C; }
+        
+        .nav-inner {
+            display: flex;
+            justify-content: space-around;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .nav-item {
+            text-align: center;
+            text-decoration: none;
+            color: #8A827A;
+            font-size: 11px;
+            padding: 0 20px;
+        }
+        
+        .nav-item.active { color: #E89870; }
         .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
+        
         .toast {
-            position: fixed; top: 50%; left: 50%;
+            position: fixed;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(90, 83, 74, 0.95); color: white;
-            padding: 18px 28px; border-radius: 14px; font-size: 15px;
-            display: none; z-index: 1000; text-align: center;
+            background: rgba(93, 83, 74, 0.9);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 15px;
+            font-size: 20px;
+            display: none;
+            z-index: 1000;
         }
+        
         .toast.show { display: block; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🎙️ 记录新词</h1>
-        <p class="subtitle">宝宝今天说了什么？</p>
-    </div>
-    <div class="main-card">
-        <div class="section-label">SELECT LANGUAGE</div>
-        <div class="lang-grid">
-            <div class="lang-btn selected" data-lang="mandarin">
-                <span class="icon">🇨🇳</span>
-                <span class="label">普通话</span>
-            </div>
-            <div class="lang-btn" data-lang="cantonese">
-                <span class="icon">🗣️</span>
-                <span class="label">粤语</span>
-            </div>
-            <div class="lang-btn" data-lang="english">
-                <span class="icon">🇬🇧</span>
-                <span class="label">英语</span>
-            </div>
+    <div class="container">
+        <div class="header-card">
+            <div class="baby-icon">👶</div>
+            <h1>宝宝语言记录</h1>
+            <p>记录每一个成长的瞬间</p>
         </div>
-        <div class="section-label">WHAT DID BABY SAY?</div>
-        <input type="text" class="word-input" id="wordInput" placeholder="例如：妈妈、抱抱">
-        <button class="submit-btn" id="submitBtn">✓ 确认记录</button>
-    </div>
-    <div class="tip-card">
-        <div class="tip-title">💡 记录提示</div>
-        <div class="tip-text">
-            如果宝宝只说了一个词的一部分，可以用括号标注：<br>
-            <code>（手）机</code> 表示宝宝只说了"机"字
+        
+        <div class="stats-brief">
+            <div class="stats-number" id="totalCount">150</div>
+            <div class="stats-label">宝宝会说多少词</div>
+        </div>
+        
+        <div class="record-card">
+            <div class="section-title">🎙️ 选择语言</div>
+            <div class="lang-buttons">
+                <button class="lang-btn mandarin selected" data-lang="mandarin">
+                    <span class="emoji">🗣️</span>普通话
+                </button>
+                <button class="lang-btn cantonese" data-lang="cantonese">
+                    <span class="emoji">🗣️</span>粤语
+                </button>
+                <button class="lang-btn english" data-lang="english">
+                    <span class="emoji">🗣️</span>英语
+                </button>
+            </div>
+            <div class="input-area">
+                <label class="input-label">宝宝刚才说的话</label>
+                <input type="text" class="word-input" id="wordInput" placeholder="例如：妈妈、抱抱">
+            </div>
+            <button class="record-btn" id="recordBtn">✅ 记录下来</button>
         </div>
     </div>
+    
     <div class="bottom-nav">
-        <a href="index.html" class="nav-item"><span class="icon">🏠</span>首页</a>
-        <a href="record.html" class="nav-item active"><span class="icon">📝</span>录入</a>
-        <a href="stats-v2.html" class="nav-item"><span class="icon">📊</span>统计</a>
+        <div class="nav-inner">
+            <a href="record.html" class="nav-item active">
+                <span class="icon">📝</span>
+                录入
+            </a>
+            <a href="stats.html" class="nav-item">
+                <span class="icon">📊</span>
+                统计
+            </a>
+        </div>
     </div>
+    
     <div class="toast" id="toast"></div>
+
     <script>
-        const TOTAL_WORDS = 135;
+        // 验证邀请码
+        if (localStorage.getItem('inviteCodeVerified') !== 'true') {
+            window.location.href = '/';
+        }
+        
         let currentLang = 'mandarin';
+        
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
@@ -136,22 +299,53 @@
                 currentLang = this.dataset.lang;
             });
         });
-        document.getElementById('submitBtn').addEventListener('click', function() {
+        
+        document.getElementById('recordBtn').addEventListener('click', async function() {
             const input = document.getElementById('wordInput');
             const word = input.value.trim();
-            if (!word) { showToast('请输入宝宝说的话'); return; }
-            let sessionWords = JSON.parse(localStorage.getItem('babyWords') || '[]');
-            sessionWords.unshift({ id: Date.now(), word: word, language: currentLang, timestamp: new Date().toISOString() });
-            localStorage.setItem('babyWords', JSON.stringify(sessionWords));
-            input.value = '';
-            showToast('✓ 记录成功！\n\n本次新增: ' + word + '\n总词汇: ' + TOTAL_WORDS + '个');
+            if (!word) { showToast('❌ 请输入宝宝说的话'); return; }
+            
+            try {
+                const response = await fetch('/api/words', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        word: word, 
+                        language: currentLang === 'mandarin' ? '普通话' : (currentLang === 'cantonese' ? '广东话' : '英语')
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    input.value = '';
+                    document.getElementById('totalCount').textContent = result.total;
+                    showToast('✅ 记录成功！✨');
+                } else {
+                    showToast('❌ ' + (result.error || '记录失败'));
+                }
+            } catch (err) {
+                showToast('❌ 网络错误，请重试');
+            }
         });
+        
         function showToast(text) {
             const toast = document.getElementById('toast');
             toast.textContent = text;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
+        
+        // 初始化统计
+        fetch('/api/words')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('totalCount').textContent = data.totalWords || 150;
+            })
+            .catch(() => {
+                document.getElementById('totalCount').textContent = 150;
+            });
+        
         document.getElementById('wordInput').focus();
     </script>
 </body>
