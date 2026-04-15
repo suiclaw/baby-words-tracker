@@ -211,12 +211,12 @@
             text-align: center;
             text-decoration: none;
             color: #8A827A;
-            font-size: 11px;
+            font-size: 16px;
             padding: 0 20px;
         }
         
-        .nav-item.active { color: #E89870; }
-        .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
+        .nav-item.active { color: #E89870; font-weight: 600; }
+        .nav-item .icon { font-size: 28px; display: block; margin-bottom: 4px; }
         
         .toast {
             position: fixed;
@@ -265,6 +265,11 @@
                 <label class="input-label">宝宝刚才说的话</label>
                 <input type="text" class="word-input" id="wordInput" placeholder="例如：妈妈、抱抱">
             </div>
+            
+            <div class="input-area" id="chineseInputArea" style="display: none;">
+                <label class="input-label">中文翻译（可选）</label>
+                <input type="text" class="word-input" id="chineseInput" placeholder="例如：欧文" style="font-size: 22px;">
+            </div>
             <button class="record-btn" id="recordBtn">✅ 记录下来</button>
         </div>
     </div>
@@ -297,13 +302,24 @@
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
                 currentLang = this.dataset.lang;
+                
+                // 选择英语时显示中文翻译输入框
+                const chineseArea = document.getElementById('chineseInputArea');
+                if (currentLang === 'english') {
+                    chineseArea.style.display = 'block';
+                } else {
+                    chineseArea.style.display = 'none';
+                }
             });
         });
         
         document.getElementById('recordBtn').addEventListener('click', async function() {
             const input = document.getElementById('wordInput');
+            const chineseInput = document.getElementById('chineseInput');
             const word = input.value.trim();
             if (!word) { showToast('❌ 请输入宝宝说的话'); return; }
+            
+            const chinese = chineseInput.value.trim();
             
             try {
                 const response = await fetch('/api/words', {
@@ -311,7 +327,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         word: word, 
-                        language: currentLang === 'mandarin' ? '普通话' : (currentLang === 'cantonese' ? '广东话' : '英语')
+                        language: currentLang === 'mandarin' ? '普通话' : (currentLang === 'cantonese' ? '广东话' : '英语'),
+                        chinese: chinese
                     })
                 });
                 
@@ -319,6 +336,7 @@
                 
                 if (result.success) {
                     input.value = '';
+                    chineseInput.value = '';
                     document.getElementById('totalCount').textContent = result.total;
                     showToast('✅ 记录成功！✨');
                 } else {

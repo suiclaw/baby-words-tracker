@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宝宝语言记录 - 统计</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,7 +25,7 @@
             padding-bottom: 90px;
         }
         
-        /* 电脑适配 - 限制最大宽度 */
+        /* 电脑适配 */
         .container { 
             max-width: 800px; 
             margin: 0 auto; 
@@ -112,16 +112,22 @@
             color: #E89870;
         }
         
+        /* 空分类提示 */
+        .cat-empty {
+            font-size: 14px;
+            color: #B8A090;
+            padding: 10px 0;
+            font-style: italic;
+        }
+        
         /* 词汇网格 - 智能自适应 */
         .word-grid {
             display: grid;
             gap: 8px;
-            /* 手机：单字一行6个，电脑：自动更多 */
             grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
         }
         
         @media (max-width: 768px) {
-            /* 手机：固定6个 */
             .word-grid {
                 grid-template-columns: repeat(6, 1fr);
             }
@@ -136,6 +142,13 @@
             font-size: 20px;
             font-weight: 500;
             color: #5D534A;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .word-item:hover {
+            opacity: 0.7;
+            transform: scale(0.95);
         }
         
         .word-item.pu {
@@ -150,46 +163,50 @@
             background: linear-gradient(135deg, #E8F0FF 0%, #D8E5FF 100%);
         }
         
-        /* 双字词汇网格 - 智能自适应 */
-        .word-grid-2 {
+        /* 双字、三字、多字词汇网格 */
+        .word-grid-wide {
             display: grid;
             gap: 10px;
-            /* 自动适配：最小100px，自动填满 */
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         }
         
         @media (max-width: 768px) {
-            /* 手机：固定4个 */
-            .word-grid-2 {
+            .word-grid-wide {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
         
         @media (max-width: 480px) {
-            /* 小手机：3个 */
-            .word-grid-2 {
+            .word-grid-wide {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
         
-        .word-item-2 {
+        .word-item-wide {
             padding: 14px 12px;
             text-align: center;
             border-radius: 12px;
             font-size: 18px;
             font-weight: 500;
             color: #5D534A;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         
-        .word-item-2.pu {
+        .word-item-wide:hover {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+        
+        .word-item-wide.pu {
             background: linear-gradient(135deg, #FFF5EE 0%, #FFE8DC 100%);
         }
         
-        .word-item-2.yue {
+        .word-item-wide.yue {
             background: linear-gradient(135deg, #E8F5E8 0%, #D8ECD8 100%);
         }
         
-        .word-item-2.en {
+        .word-item-wide.en {
             background: linear-gradient(135deg, #E8F0FF 0%, #D8E5FF 100%);
         }
         
@@ -202,6 +219,13 @@
             background: linear-gradient(135deg, #E8F0FF 0%, #D8E5FF 100%);
             border-radius: 12px;
             margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .english-item:hover {
+            opacity: 0.7;
+            transform: scale(0.98);
         }
         
         .english-word {
@@ -240,12 +264,94 @@
             text-align: center;
             text-decoration: none;
             color: #8A827A;
-            font-size: 11px;
+            font-size: 16px;
             padding: 0 20px;
         }
         
-        .nav-item.active { color: #E89870; }
-        .nav-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
+        .nav-item.active { color: #E89870; font-weight: 600; }
+        .nav-item .icon { font-size: 28px; display: block; margin-bottom: 4px; }
+        
+        /* 删除确认弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #5D534A;
+            margin-bottom: 15px;
+        }
+        
+        .modal-word {
+            font-size: 32px;
+            font-weight: 700;
+            color: #E89870;
+            margin-bottom: 10px;
+        }
+        
+        .modal-hint {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 25px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .modal-btn.cancel {
+            background: #F5F0EB;
+            color: #8A827A;
+        }
+        
+        .modal-btn.cancel:hover {
+            background: #E8E0D8;
+        }
+        
+        .modal-btn.delete {
+            background: linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%);
+            color: white;
+        }
+        
+        .modal-btn.delete:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -272,12 +378,72 @@
             </a>
         </div>
     </div>
+    
+    <!-- 删除确认弹窗 -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <div class="modal-title">确认删除此词汇？</div>
+            <div class="modal-word" id="deleteWord"></div>
+            <div class="modal-hint">删除后无法恢复</div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">取消</button>
+                <button class="modal-btn delete" id="confirmDeleteBtn">删除</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // 验证邀请码
         if (localStorage.getItem('inviteCodeVerified') !== 'true') {
             window.location.href = '/';
         }
+        
+        // 当前要删除的词汇
+        let currentDeleteWord = '';
+        
+        // 显示删除确认框
+        function showDeleteModal(word) {
+            currentDeleteWord = word;
+            document.getElementById('deleteWord').textContent = word;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+        
+        // 关闭确认框
+        function closeModal() {
+            currentDeleteWord = '';
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+        
+        // 确认删除
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
+            if (!currentDeleteWord) return;
+            
+            try {
+                const response = await fetch(`/api/words/${encodeURIComponent(currentDeleteWord)}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    closeModal();
+                    // 刷新页面
+                    location.reload();
+                } else {
+                    alert('删除失败：' + (result.error || '未知错误'));
+                }
+            } catch (err) {
+                alert('网络错误，请重试');
+                console.error(err);
+            }
+        });
+        
+        // 点击遮罩关闭
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
         
         // 英语词汇中文映射
         const englishMap = {
@@ -287,7 +453,8 @@
             'spoon': '勺子',
             'moon': '月亮',
             'Apple': '苹果',
-            'ball': '球'
+            'ball': '球',
+            'owen': ''
         };
         
         // 加载数据
@@ -300,145 +467,17 @@
                 
                 // 普通话
                 if (data.byLanguage && data.byLanguage['普通话']) {
-                    const pu = data.byLanguage['普通话'];
-                    const puTotal = (pu['单字']?.count || 0) + (pu['双字']?.count || 0) + 
-                                    (pu['三字']?.count || 0) + (pu['句子']?.count || 0);
-                    
-                    html += `
-                        <div class="lang-section">
-                            <div class="lang-header">
-                                <div class="lang-title">🗣️ 普通话</div>
-                                <div class="lang-num pu">${puTotal}</div>
-                            </div>
-                    `;
-                    
-                    // 单字
-                    if (pu['单字'] && pu['单字'].words && pu['单字'].words.length > 0) {
-                        // 分离带括号和不带括号的词
-                        const bracketWords = pu['单字'].words.filter(w => w.includes('（') || w.includes('('));
-                        const normalWords = pu['单字'].words.filter(w => !w.includes('（') && !w.includes('('));
-                        
-                        // 普通单字
-                        if (normalWords.length > 0) {
-                            html += `
-                                <div class="cat-title">单字词汇 <span class="cat-num">${normalWords.length}</span></div>
-                                <div class="word-grid">
-                            `;
-                            normalWords.forEach(w => {
-                                html += `<div class="word-item pu">${w}</div>`;
-                            });
-                            html += `</div>`;
-                        }
-                        
-                        // 带括号的词（用更宽的网格）
-                        if (bracketWords.length > 0) {
-                            html += `
-                                <div class="cat-title">带括号的词 <span class="cat-num">${bracketWords.length}</span></div>
-                                <div class="word-grid-2">
-                            `;
-                            bracketWords.forEach(w => {
-                                html += `<div class="word-item-2 pu">${w}</div>`;
-                            });
-                            html += `</div>`;
-                        }
-                    }
-                    
-                    // 双字
-                    if (pu['双字'] && pu['双字'].words && pu['双字'].words.length > 0) {
-                        html += `
-                            <div class="cat-title">双字词语 <span class="cat-num">${pu['双字'].count}</span></div>
-                            <div class="word-grid-2">
-                        `;
-                        pu['双字'].words.forEach(w => {
-                            html += `<div class="word-item-2 pu">${w}</div>`;
-                        });
-                        html += `</div>`;
-                    }
-                    
-                    // 三字
-                    if (pu['三字'] && pu['三字'].words && pu['三字'].words.length > 0) {
-                        html += `
-                            <div class="cat-title">三字词语 <span class="cat-num">${pu['三字'].count}</span></div>
-                            <div class="word-grid-2">
-                        `;
-                        pu['三字'].words.forEach(w => {
-                            html += `<div class="word-item-2 pu">${w}</div>`;
-                        });
-                        html += `</div>`;
-                    }
-                    
-                    html += `</div>`;
+                    html += createLanguageSection(data.byLanguage['普通话'], '普通话', 'pu');
                 }
                 
                 // 广东话
                 if (data.byLanguage && data.byLanguage['广东话']) {
-                    const yue = data.byLanguage['广东话'];
-                    const yueTotal = (yue['单字']?.count || 0) + (yue['双字']?.count || 0) + 
-                                     (yue['三字']?.count || 0) + (yue['句子']?.count || 0);
-                    
-                    html += `
-                        <div class="lang-section">
-                            <div class="lang-header">
-                                <div class="lang-title">🎯 广东话</div>
-                                <div class="lang-num yue">${yueTotal}</div>
-                            </div>
-                    `;
-                    
-                    // 单字
-                    if (yue['单字'] && yue['单字'].words && yue['单字'].words.length > 0) {
-                        html += `
-                            <div class="cat-title">单字词汇 <span class="cat-num">${yue['单字'].count}</span></div>
-                            <div class="word-grid">
-                        `;
-                        yue['单字'].words.forEach(w => {
-                            html += `<div class="word-item yue">${w}</div>`;
-                        });
-                        html += `</div>`;
-                    }
-                    
-                    // 双字
-                    if (yue['双字'] && yue['双字'].words && yue['双字'].words.length > 0) {
-                        html += `
-                            <div class="cat-title">双字词语 <span class="cat-num">${yue['双字'].count}</span></div>
-                            <div class="word-grid-2">
-                        `;
-                        yue['双字'].words.forEach(w => {
-                            html += `<div class="word-item-2 yue">${w}</div>`;
-                        });
-                        html += `</div>`;
-                    }
-                    
-                    html += `</div>`;
+                    html += createLanguageSection(data.byLanguage['广东话'], '广东话', 'yue');
                 }
                 
                 // 英语
                 if (data.byLanguage && data.byLanguage['英语']) {
-                    const en = data.byLanguage['英语'];
-                    const enTotal = (en['单字']?.count || 0) + (en['双字']?.count || 0) + 
-                                    (en['三字']?.count || 0) + (en['句子']?.count || 0);
-                    
-                    html += `
-                        <div class="lang-section">
-                            <div class="lang-header">
-                                <div class="lang-title">🇬🇧 英语</div>
-                                <div class="lang-num en">${enTotal}</div>
-                            </div>
-                    `;
-                    
-                    // 英语词汇
-                    if (en['句子'] && en['句子'].words && en['句子'].words.length > 0) {
-                        en['句子'].words.forEach(w => {
-                            const cn = englishMap[w] || '';
-                            html += `
-                                <div class="english-item">
-                                    <span class="english-word">${w}</span>
-                                    <span class="english-cn">${cn}</span>
-                                </div>
-                            `;
-                        });
-                    }
-                    
-                    html += `</div>`;
+                    html += createEnglishSection(data.byLanguage['英语'], data.wordRegistry);
                 }
                 
                 document.getElementById('content').innerHTML = html;
@@ -447,6 +486,128 @@
                 console.error('加载数据失败', err);
                 document.getElementById('content').innerHTML = '<p style="text-align:center;padding:40px;color:#999;">加载失败，请刷新重试</p>';
             });
+        
+        // 创建语言分类区块（普通话、粤语）
+        function createLanguageSection(langData, langName, langClass) {
+            const total = (langData['单字']?.count || 0) + 
+                         (langData['双字']?.count || 0) + 
+                         (langData['三字']?.count || 0) + 
+                         (langData['多字']?.count || 0) +
+                         (langData['句子']?.count || 0);
+            
+            let html = `
+                <div class="lang-section">
+                    <div class="lang-header">
+                        <div class="lang-title">${langName === '普通话' ? '🗣️' : '🎯'} ${langName}</div>
+                        <div class="lang-num ${langClass}">${total}</div>
+                    </div>
+            `;
+            
+            // 单字（始终显示）
+            if (langData['单字']) {
+                const words = langData['单字'].words || [];
+                const bracketWords = words.filter(w => w.includes('（') || w.includes('('));
+                const normalWords = words.filter(w => !w.includes('（') && !w.includes('('));
+                
+                if (normalWords.length > 0) {
+                    html += `
+                        <div class="cat-title">单字词汇 <span class="cat-num">${normalWords.length}</span></div>
+                        <div class="word-grid">
+                    `;
+                    normalWords.forEach(w => {
+                        html += `<div class="word-item ${langClass}" onclick="showDeleteModal('${w}')">${w}</div>`;
+                    });
+                    html += `</div>`;
+                }
+                
+                if (bracketWords.length > 0) {
+                    html += `
+                        <div class="cat-title">带括号的词 <span class="cat-num">${bracketWords.length}</span></div>
+                        <div class="word-grid-wide">
+                    `;
+                    bracketWords.forEach(w => {
+                        html += `<div class="word-item-wide ${langClass}" onclick="showDeleteModal('${w}')">${w}</div>`;
+                    });
+                    html += `</div>`;
+                }
+            }
+            
+            // 双字（始终显示）
+            const doubleCount = langData['双字']?.count || 0;
+            html += `<div class="cat-title">双字词语 <span class="cat-num">${doubleCount}</span></div>`;
+            if (doubleCount > 0 && langData['双字'].words) {
+                html += `<div class="word-grid-wide">`;
+                langData['双字'].words.forEach(w => {
+                    html += `<div class="word-item-wide ${langClass}" onclick="showDeleteModal('${w}')">${w}</div>`;
+                });
+                html += `</div>`;
+            } else {
+                html += `<div class="cat-empty">暂无</div>`;
+            }
+            
+            // 三字（始终显示）
+            const tripleCount = langData['三字']?.count || 0;
+            html += `<div class="cat-title">三字词语 <span class="cat-num">${tripleCount}</span></div>`;
+            if (tripleCount > 0 && langData['三字'].words) {
+                html += `<div class="word-grid-wide">`;
+                langData['三字'].words.forEach(w => {
+                    html += `<div class="word-item-wide ${langClass}" onclick="showDeleteModal('${w}')">${w}</div>`;
+                });
+                html += `</div>`;
+            } else {
+                html += `<div class="cat-empty">暂无</div>`;
+            }
+            
+            // 多字（有数据才显示）
+            const multiCount = langData['多字']?.count || 0;
+            if (multiCount > 0 && langData['多字']?.words) {
+                html += `
+                    <div class="cat-title">多字词语 <span class="cat-num">${multiCount}</span></div>
+                    <div class="word-grid-wide">
+                `;
+                langData['多字'].words.forEach(w => {
+                    html += `<div class="word-item-wide ${langClass}" onclick="showDeleteModal('${w}')">${w}</div>`;
+                });
+                html += `</div>`;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+        
+        // 创建英语区块
+        function createEnglishSection(langData, wordRegistry) {
+            const total = (langData['单字']?.count || 0) + 
+                         (langData['双字']?.count || 0) + 
+                         (langData['三字']?.count || 0) + 
+                         (langData['多字']?.count || 0) +
+                         (langData['句子']?.count || 0);
+            
+            let html = `
+                <div class="lang-section">
+                    <div class="lang-header">
+                        <div class="lang-title">🇬🇧 英语</div>
+                        <div class="lang-num en">${total}</div>
+                    </div>
+            `;
+            
+            // 英语词汇（目前都在"句子"分类里）
+            if (langData['句子'] && langData['句子'].words) {
+                langData['句子'].words.forEach(w => {
+                    // 从wordRegistry获取中文翻译
+                    const cn = (wordRegistry && wordRegistry[w] && wordRegistry[w].chinese) || '';
+                    html += `
+                        <div class="english-item" onclick="showDeleteModal('${w}')">
+                            <span class="english-word">${w}</span>
+                            <span class="english-cn">${cn}</span>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += `</div>`;
+            return html;
+        }
     </script>
 </body>
 </html>
